@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/raj-telecom-logo.png">
+<title>Contact Us — Raj Telecom</title>
+<meta name="description" content="Tell us what's wrong with your phone and book a repair slot — or call, WhatsApp, or visit the shop directly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner wrap">
+    <a href="index.html" class="logo">
+      <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="services.html">Our Services</a>
+      <a href="how-we-work.html">How We Work</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html" aria-current="page">Contact Us</a>
+    </div>
+    <div class="nav-cta">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle"><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap page-hero reveal">
+  <span class="eyebrow">Get in touch</span>
+  <h1>Tell us what's wrong. We'll open your ticket.</h1>
+  <p class="lead">Fill this in and we'll get back to you with an estimate and available slots — or just call/WhatsApp us directly if that's easier.</p>
+</header>
+
+<section class="section">
+  <div class="wrap contact-grid">
+
+    <div class="reveal">
+      <form id="contact-form">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 98765 43210" required>
+        </div>
+        <div class="field">
+          <label for="device">Device model</label>
+          <input type="text" id="device" name="device" placeholder="e.g. Samsung Galaxy M14">
+        </div>
+        <div class="field">
+          <label for="issue">What's the issue?</label>
+          <select id="issue" name="issue">
+            <option>Cracked / broken screen</option>
+            <option>Battery draining fast</option>
+            <option>Water damage</option>
+            <option>Charging port issue</option>
+            <option>Camera not working</option>
+            <option>Software / performance issue</option>
+            <option>Not sure — need diagnosis</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Anything else we should know?</label>
+          <textarea id="message" name="message" placeholder="Describe the problem, when it started, etc."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Send message</button>
+        <p class="form-note form-status">We usually reply within a few hours during shop hours.</p>
+      </form>
+    </div>
+
+    <div class="reveal">
+      <div class="info-card">
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><strong>Shop address</strong><span>Raj Telecom, Santosh Bhavan, Nalasopara East, Maharashtra</span></div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+          <div><strong>Phone</strong><span>+91 00000 00000</span></div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <div><strong>WhatsApp</strong><span>Same number — message anytime</span></div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div><strong>Hours</strong><span>Monday–Saturday, 10 AM – 8 PM</span></div>
+        </div>
+      </div>
+
+      <div class="map-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Map preview — will embed live Google Maps location before launch
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-tear"></div>
+  <div class="wrap">
+    <div class="foot-top reveal">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
+        </a>
+        <p>Certified mobile phone repair — screens, batteries, water damage and more. Fixed while you wait.</p>
+        <div class="foot-seal">
+          <svg viewBox="0 0 120 120">
+            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="2.5"/>
+            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1"/>
+            <path id="footSealArc" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
+            <text font-size="7.5" letter-spacing="2">
+              <textPath href="#footSealArc" startOffset="1%">GENUINE PARTS / WARRANTIED</textPath>
+            </text>
+            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6"/>
+          </svg>
+          <span>Every repair, certified.</span>
+        </div>
+      </div>
+
+      <div class="foot-links">
+        <div class="foot-col">
+          <h4>Explore</h4>
+          <a href="index.html">Home</a>
+          <a href="services.html">Our Services</a>
+          <a href="how-we-work.html">How We Work</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+        <div class="foot-col">
+          <h4>Contact</h4>
+          <span>+91 00000 00000</span>
+          <a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a>
+          <span>Mon–Sat, 10 AM – 8 PM</span>
+        </div>
+        <div class="foot-col">
+          <h4>Shop</h4>
+          <span>Raj Telecom, Santosh Bhavan</span>
+          <span>Nalasopara East, Maharashtra</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Raj Telecom. All rights reserved.</span>
+      <span>Ticket-based repair, since day one.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-callbar">
+  <a href="booking.html" class="btn btn-primary btn-sm">Book a Slot</a>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

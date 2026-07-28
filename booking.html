@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/raj-telecom-logo.png">
+<title>Book a Repair — Raj Telecom</title>
+<meta name="description" content="Select your brand and model, tell us the problem, and choose how you'd like it repaired.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner wrap">
+    <a href="index.html" class="logo">
+      <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="services.html">Our Services</a>
+      <a href="how-we-work.html">How We Work</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="nav-cta">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle"><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap page-hero reveal">
+  <span class="eyebrow">Book a repair</span>
+  <h1>Let's get your phone sorted.</h1>
+  <p class="lead">A few quick taps — your brand, model, the problem, and a time that works for you.</p>
+</header>
+
+<section class="section tight">
+  <div class="wrap" style="max-width:720px;">
+
+    <div class="wizard-steps" id="wizardSteps">
+      <div class="wizard-step active" data-group="1">
+        <div class="wizard-step-num">1</div>
+        <div class="wizard-step-label">Device</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step" data-group="2">
+        <div class="wizard-step-num">2</div>
+        <div class="wizard-step-label">Problem</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step" data-group="3">
+        <div class="wizard-step-num">3</div>
+        <div class="wizard-step-label">Details</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step" data-group="4">
+        <div class="wizard-step-num">4</div>
+        <div class="wizard-step-label">Service</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step" data-group="5">
+        <div class="wizard-step-num">5</div>
+        <div class="wizard-step-label">Confirm</div>
+      </div>
+    </div>
+
+    <!-- PANEL: brand -->
+    <div class="wizard-panel" id="panel-brand" data-panel="brand" hidden>
+      <h2>Select your brand</h2>
+      <p class="wizard-sub">Pick the brand of the device that needs repair.</p>
+      <div class="brand-grid" id="brandGrid"></div>
+    </div>
+
+    <!-- PANEL: model -->
+    <div class="wizard-panel" id="panel-model" data-panel="model" hidden>
+      <div class="picked-chip" id="brandChip"></div>
+      <h2>Select your model</h2>
+      <p class="wizard-sub" id="modelSub">Choose the closest match — exact variant doesn't matter yet.</p>
+      <div class="model-list" id="modelList"></div>
+      <div class="field inline-reveal" id="field-model-other" hidden>
+        <label for="b-model-other">Your phone model</label>
+        <input type="text" id="b-model-other" placeholder="e.g. Galaxy F14, Redmi 12, iPhone 12 mini">
+      </div>
+      <div class="wizard-actions" id="modelActions" hidden>
+        <span></span>
+        <button type="button" class="btn btn-primary" id="modelContinueBtn">Continue</button>
+      </div>
+    </div>
+
+    <!-- PANEL: problem -->
+    <div class="wizard-panel" id="panel-problem" data-panel="problem" hidden>
+      <h2>What's the problem?</h2>
+      <p class="wizard-sub">Pick the closest match — we'll confirm exact details when we diagnose it.</p>
+      <div class="choice-grid" id="problemGrid"></div>
+      <div class="field inline-reveal" id="field-problem-other" hidden>
+        <label for="b-problem-other">Describe the problem</label>
+        <textarea id="b-problem-other" placeholder="Tell us what's happening with your phone"></textarea>
+      </div>
+      <div class="wizard-actions" id="problemActions" hidden>
+        <button type="button" class="btn btn-ghost" data-back-to="model">Back</button>
+        <button type="button" class="btn btn-primary" id="problemContinueBtn">Continue</button>
+      </div>
+    </div>
+
+    <!-- PANEL: details -->
+    <form class="wizard-panel" id="panel-details" data-panel="details" hidden novalidate>
+      <h2>Your details</h2>
+      <p class="wizard-sub">So we know who we're helping, and how to reach you.</p>
+
+      <div class="field" id="field-name">
+        <label for="b-name">Your name</label>
+        <input type="text" id="b-name" placeholder="e.g. Priya Sharma" required>
+        <div class="field-error">Please enter your name.</div>
+      </div>
+      <div class="field" id="field-phone">
+        <label for="b-phone">Phone number</label>
+        <input type="tel" id="b-phone" placeholder="e.g. 98765 43210" required>
+        <div class="field-error">Please enter a valid phone number.</div>
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-ghost" data-back-to="problem">Back</button>
+        <button type="submit" class="btn btn-primary">Continue</button>
+      </div>
+    </form>
+
+    <!-- PANEL: service -->
+    <div class="wizard-panel" id="panel-service" data-panel="service" hidden>
+      <h2>How should we repair it?</h2>
+      <p class="wizard-sub">Choose whichever is easiest for you.</p>
+
+      <div class="option-card" data-value="visit" tabindex="0" role="button">
+        <div class="option-radio"></div>
+        <div class="option-copy">
+          <h3>Visit the shop</h3>
+          <p>Bring your phone in — most repairs are done the same visit.</p>
+          <span class="option-tag">No extra charge</span>
+        </div>
+      </div>
+
+      <div class="option-card" data-value="pickup" tabindex="0" role="button">
+        <div class="option-radio"></div>
+        <div class="option-copy">
+          <h3>Doorstep pickup &amp; drop</h3>
+          <p>We pick your phone up from your location, repair it, and bring it back.</p>
+          <span class="option-tag">+₹99 · pickup within 1 hr · returned in 3–4 hrs</span>
+        </div>
+      </div>
+
+      <div class="option-card" data-value="home" tabindex="0" role="button">
+        <div class="option-radio"></div>
+        <div class="option-copy">
+          <h3>Repair at your home</h3>
+          <p>A technician visits and repairs your phone on the spot, where possible.</p>
+          <span class="option-tag">+₹149 · subject to the issue</span>
+        </div>
+      </div>
+
+      <div class="field inline-reveal" id="field-address" hidden>
+        <label for="b-address">Pickup / visit address</label>
+        <textarea id="b-address" placeholder="Flat / house no., street, landmark, area"></textarea>
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-ghost" data-back-to="details">Back</button>
+        <button type="button" class="btn btn-primary" id="serviceContinueBtn" hidden>Continue</button>
+      </div>
+    </div>
+
+    <!-- PANEL: slot -->
+    <div class="wizard-panel" id="panel-slot" data-panel="slot" hidden>
+      <h2>Choose a slot</h2>
+      <p class="wizard-sub" id="slotSub">Pick a time that works for you.</p>
+
+      <div class="slot-grid">
+        <div class="slot-chip" data-value="Today · 2:00 – 3:00 PM">
+          <div class="slot-day">Today</div>
+          <div class="slot-time">2:00 – 3:00 PM</div>
+        </div>
+        <div class="slot-chip" data-value="Today · 4:00 – 5:00 PM">
+          <div class="slot-day">Today</div>
+          <div class="slot-time">4:00 – 5:00 PM</div>
+        </div>
+        <div class="slot-chip" data-value="Tomorrow · 10:00 – 11:00 AM">
+          <div class="slot-day">Tomorrow</div>
+          <div class="slot-time">10:00 – 11:00 AM</div>
+        </div>
+        <div class="slot-chip" data-value="Tomorrow · 1:00 – 2:00 PM">
+          <div class="slot-day">Tomorrow</div>
+          <div class="slot-time">1:00 – 2:00 PM</div>
+        </div>
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-ghost" data-back-to="service">Back</button>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- PANEL: confirm -->
+    <div class="wizard-panel" id="panel-confirm" data-panel="confirm" hidden>
+      <h2>Review your booking</h2>
+      <p class="wizard-sub">Check everything looks right before confirming.</p>
+
+      <div class="summary-list" id="summaryList"></div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-ghost" data-back-to="slot">Back</button>
+        <button type="button" class="btn btn-primary" id="confirmBtn">Confirm Booking</button>
+      </div>
+    </div>
+
+    <!-- PANEL: success -->
+    <div class="wizard-panel wizard-success" id="panel-success" data-panel="success" hidden>
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <h2>Your ticket is booked.</h2>
+      <p>We've noted everything down. Here's your repair ticket.</p>
+
+      <div class="ticket" style="text-align:left; margin: 0 auto 4px; max-width:420px;">
+        <span class="ticket-notch left"></span>
+        <span class="ticket-notch right"></span>
+        <div class="ticket-head">
+          <div class="ticket-id">TICKET <strong id="ticketNum">#RT-0000</strong><br><span id="ticketTime"></span></div>
+          <span class="status-pill state-repairing"><span class="status-dot"></span>Booking Confirmed</span>
+        </div>
+        <div class="ticket-stamp" data-ticket-stamp>
+          <svg viewBox="0 0 120 120">
+            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="3"/>
+            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1.2"/>
+            <path id="stampArcBooking" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
+            <text font-size="8" letter-spacing="2">
+              <textPath href="#stampArcBooking" startOffset="1%">RAJ TELECOM / CONFIRMED</textPath>
+            </text>
+            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6.5"/>
+          </svg>
+        </div>
+        <div class="ticket-perf"></div>
+        <div class="ticket-body">
+          <div class="summary-list" id="ticketSummary" style="border:none;"></div>
+        </div>
+      </div>
+
+      <div class="success-note">
+        This is a design preview of the booking ticket. Once Phase 2 is live, this confirmation will also reach the shop instantly on WhatsApp, and this booking will be saved for real.
+      </div>
+
+      <div style="margin-top:26px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button type="button" class="btn btn-ghost" id="restartBtn">Book Another</button>
+        <a href="index.html" class="btn btn-dark">Back to Home</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-tear"></div>
+  <div class="wrap">
+    <div class="foot-top reveal">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
+        </a>
+        <p>Certified mobile phone repair — screens, batteries, water damage and more. Fixed while you wait.</p>
+        <div class="foot-seal">
+          <svg viewBox="0 0 120 120">
+            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="2.5"/>
+            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1"/>
+            <path id="footSealArc" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
+            <text font-size="7.5" letter-spacing="2">
+              <textPath href="#footSealArc" startOffset="1%">GENUINE PARTS / WARRANTIED</textPath>
+            </text>
+            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6"/>
+          </svg>
+          <span>Every repair, certified.</span>
+        </div>
+      </div>
+
+      <div class="foot-links">
+        <div class="foot-col">
+          <h4>Explore</h4>
+          <a href="index.html">Home</a>
+          <a href="services.html">Our Services</a>
+          <a href="how-we-work.html">How We Work</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+        <div class="foot-col">
+          <h4>Contact</h4>
+          <span>+91 00000 00000</span>
+          <a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a>
+          <span>Mon–Sat, 10 AM – 8 PM</span>
+        </div>
+        <div class="foot-col">
+          <h4>Shop</h4>
+   <span>Raj Telecom, Santosh Bhavan</span>
+          <span>Nalasopara East, Maharashtra</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Raj Telecom. All rights reserved.</span>
+      <span>Ticket-based repair, since day one.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-callbar">
+  <a href="booking.html" class="btn btn-primary btn-sm">Book a Slot</a>
+</div>
+
+<script src="main.js"></script>
+<script src="booking.js"></script>
+</body>
+</html>
