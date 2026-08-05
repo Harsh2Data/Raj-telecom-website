@@ -1,376 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="assets/raj-telecom-logo.png">
-<title>Raj Telecom — Same-Day Phone Repair You Can Trust</title>
-<meta name="description" content="Screen, battery, water damage and charging port repairs — done same day by certified technicians. Walk in or book a slot online.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <script>try{if(localStorage.getItem('rt-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <link rel="icon" type="image/png" href="assets/raj-telecom-logo.png">
+  <title>Raj Telecom — Premium Mobile Repair</title>
+  <meta name="description" content="Premium same-day mobile repair in Nalasopara. Screens, batteries, charging, water damage and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="premium.css">
+  <link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
-
-<nav class="site-nav">
-  <div class="nav-inner wrap">
-    <a href="index.html" class="logo">
-      <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
-    </a>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="services.html">Our Services</a>
-      <a href="how-we-work.html">How We Work</a>
-      <a href="about.html">About Us</a>
-      <a href="contact.html">Contact Us</a>
-    </div>
-    <div class="nav-cta">
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle"><span></span></button>
-    </div>
-  </div>
-</nav>
-
-<header class="hero-photo">
-<div class="wrap hero">
-  <div class="reveal">
-    <span class="eyebrow">Local · Certified · Same-Day</span>
-    <h1>Something wrong with your phone?<br>We'll take care of it, simply and honestly.</h1>
-    <p class="lead">We check your phone, explain the problem in plain words, and only fix what actually needs fixing — so you always know what's happening and why.</p>
-    <div class="hero-ctas">
-      <a href="booking.html" class="btn btn-primary">Book a Repair Slot</a>
-    </div>
-    <div class="hero-trust">
-      <div><strong>500+</strong>Phones repaired</div>
-      <div><strong>4.8★</strong>Customer rating</div>
-      <div><strong>6 mo</strong>Warranty on parts</div>
-      <div><strong>&lt;4 hrs</strong>Average turnaround</div>
-    </div>
-  </div>
-
-  <div class="reveal">
-    <div class="ticket">
-      <span class="ticket-notch left"></span>
-      <span class="ticket-notch right"></span>
-      <div class="ticket-head">
-        <div class="ticket-id">TICKET <strong>#RT-1042</strong><br>Opened today, 11:20 AM</div>
-        <span class="status-pill" data-ticket-status>
-          <span class="status-dot"></span><span data-status-text>Diagnosing</span>
-        </span>
+  <script>document.body.classList.toggle('is-home', /(^|\/)(index\.html)?$/.test(location.pathname));</script>
+  <nav class="site-nav">
+    <div class="nav-inner wrap">
+      <a href="index.html" class="logo"><span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span></a>
+      <div class="nav-links" id="navLinks">
+        <div class="nav-links-head"><a href="index.html" class="logo"><span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span></a><button type="button" class="nav-close" id="navClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+        <a href="index.html" aria-current="page">Home</a><a href="services.html">Services</a><a href="how-we-work.html">How it works</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="booking.html" class="nav-book-mobile">Book Repair</a>
       </div>
-      <div class="ticket-stamp" data-ticket-stamp>
-        <svg viewBox="0 0 120 120">
-          <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="3"/>
-          <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1.2"/>
-          <path id="stampArcHero" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
-          <text font-size="8.4" letter-spacing="2.2">
-            <textPath href="#stampArcHero" startOffset="1%">GENUINE PARTS / CERTIFIED</textPath>
-          </text>
-          <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6.5"/>
-        </svg>
+      <div class="nav-cta"><button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><a class="nav-book" href="booking.html">Book repair</a><button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle"><span></span></button></div>
+    </div>
+  </nav>
+
+  <header class="premium-hero">
+    <div class="wrap premium-hero-grid">
+      <div class="hero-copy reveal">
+        <span class="premium-kicker"><i></i> Nalasopara's trusted repair centre</span>
+        <h1>Your phone, <em>back to brilliant.</em></h1>
+        <p>Expert repairs for the device you depend on every day. Clear pricing, quality-tested parts, and service that feels effortless.</p>
+        <div class="hero-ctas"><a href="booking.html" class="btn btn-primary">Book a repair <span>→</span></a><a href="tel:+910000000000" class="text-action">Call the centre <span>↗</span></a></div>
+        <div class="hero-trust"><span>★★★★★</span><strong>4.8/5 customer rating</strong><small>500+ devices repaired</small></div>
       </div>
-      <div class="ticket-perf"></div>
-      <div class="ticket-body">
-        <div class="ticket-device">
-          <span class="ticket-device-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-          </span>
-          <div>
-            <div class="ticket-device-name">Smartphone — cracked screen</div>
-            <div class="ticket-device-issue">Front glass replacement requested</div>
-          </div>
-        </div>
-        <div class="ticket-progress">
-          <div class="progress-track"><div class="progress-fill" data-ticket-fill></div></div>
-          <div class="progress-labels">
-            <span data-ticket-label="diagnosing">Diagnosing</span>
-            <span data-ticket-label="repairing">Repairing</span>
-            <span data-ticket-label="ready">Ready</span>
-          </div>
-        </div>
-        <div class="ticket-meta">
-          <span>Technician: <strong>Assigned</strong></span>
-          <span>Est. done: <strong>Today, 3:30 PM</strong></span>
-        </div>
+      <div class="hero-device reveal">
+        <div class="device-orbit orbit-one"></div><div class="device-orbit orbit-two"></div>
+        <img src="assets/broken-phone.png" alt="Smartphone ready for repair at Raj Telecom">
+        <div class="repair-chip"><b>01</b><span>Free<br>diagnosis</span></div>
+        <div class="ready-chip"><i>✓</i><span>Most repairs<br><b>done the same day</b></span></div>
       </div>
     </div>
-  </div>
-</div>
-</header>
+  </header>
 
-<section class="section tight">
-  <div class="wrap reveal">
-    <div class="stat-strip">
-      <div class="stat-cell"><strong>500+</strong><span>PHONES FIXED</span></div>
-      <div class="stat-cell"><strong>4.8 / 5</strong><span>AVG. RATING</span></div>
-      <div class="stat-cell"><strong>6 MO</strong><span>PARTS WARRANTY</span></div>
-      <div class="stat-cell"><strong>90%</strong><span>FIXED SAME DAY</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="problems">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Problems we solve</span>
-      <h2>Tell us what's wrong — we've likely seen it before.</h2>
-      <p>Whatever the issue, we diagnose it properly before touching anything, and explain it in plain words.</p>
-    </div>
-
-    <div class="grid-4">
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 8l3 3-3 3"/></svg></span>
-        <h3>Broken Display</h3>
-        <p>Cracked glass or a display that won't show anything right.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></span>
-        <h3>Touch</h3>
-        <p>Screen doesn't respond, or responds in the wrong place.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
-        <h3>Charging</h3>
-        <p>Won't charge, charges slowly, or drains while plugged in.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 5.8 6 10.3a6 6 0 1 1-12 0c0-4.5 6-10.3 6-10.3z"/></svg></span>
-        <h3>Water Damage</h3>
-        <p>Dropped in water — bring it in before switching it on.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
-        <h3>Lost Data</h3>
-        <p>Photos, contacts, or files that suddenly disappeared.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></span>
-        <h3>Sound</h3>
-        <p>Speaker crackling, muffled, or no sound at all.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="6" height="6"/><path d="M8 12h4m4 0h6m-6-4v8"/></svg></span>
-        <h3>Charging Jack</h3>
-        <p>Loose connection or a port that won't hold the cable.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></span>
-        <h3>Sensor</h3>
-        <p>Proximity, fingerprint, or face-unlock not responding.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 14l5-5 3 3 5-7 3 4"/></svg></span>
-        <h3>Broken Panel</h3>
-        <p>Cracked or dented back panel or frame.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v7M12 15v7"/></svg></span>
-        <h3>Aux Jack</h3>
-        <p>Headphone jack loose, silent, or only working one side.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
-        <h3>Camera</h3>
-        <p>Blurry photos, black screen, or a cracked lens.</p>
-      </div>
-      <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg></span>
-        <h3>Mic</h3>
-        <p>People can't hear you clearly on calls or recordings.</p>
-      </div>
-      <div class="problem-block more reveal">
-        <h3>And more</h3>
-        <p>Not seeing your issue here? Tell us about it when you book.</p>
+  <section class="brand-rail-section">
+    <div class="wrap">
+      <div class="brand-rail-head reveal"><div><span class="eyebrow">All major brands</span><h2>Choose your phone brand.</h2></div><div class="brand-rail-controls"><button class="rail-arrow" type="button" data-brand-prev aria-label="Previous brands">&larr;</button><button class="rail-arrow" type="button" data-brand-next aria-label="Next brands">&rarr;</button></div></div>
+      <div class="brand-rail reveal" data-brand-rail>
+        <a class="brand-block" href="booking.html?brand=Apple"><span class="brand-logo"><img src="assets/brands/iphone.png" alt="Apple"></span><span class="brand-name">Apple</span></a>
+        <a class="brand-block" href="booking.html?brand=Samsung"><span class="brand-logo"><img src="assets/brands/samsung.png" alt="Samsung"></span><span class="brand-name">Samsung</span></a>
+        <a class="brand-block" href="booking.html?brand=OnePlus"><span class="brand-logo"><img src="assets/brands/oneplus.png" alt="OnePlus"></span><span class="brand-name">OnePlus</span></a>
+        <a class="brand-block" href="booking.html?brand=Xiaomi"><span class="brand-logo"><img src="assets/brands/xiaomi.png" alt="Xiaomi"></span><span class="brand-name">Xiaomi</span></a>
+        <a class="brand-block" href="booking.html?brand=Redmi"><span class="brand-logo"><img src="assets/brands/redmi.png" alt="Redmi"></span><span class="brand-name">Redmi</span></a>
+        <a class="brand-block" href="booking.html?brand=Poco"><span class="brand-logo"><img src="assets/brands/poco.png" alt="Poco"></span><span class="brand-name">Poco</span></a>
+        <a class="brand-block" href="booking.html?brand=Realme"><span class="brand-logo"><img src="assets/brands/realme.png" alt="Realme"></span><span class="brand-name">Realme</span></a>
+        <a class="brand-block" href="booking.html?brand=Oppo"><span class="brand-logo"><img src="assets/brands/oppo.png" alt="Oppo"></span><span class="brand-name">Oppo</span></a>
+        <a class="brand-block" href="booking.html?brand=Vivo"><span class="brand-logo"><img src="assets/brands/vivo.png" alt="Vivo"></span><span class="brand-name">Vivo</span></a>
+        <a class="brand-block" href="booking.html?brand=Google%20Pixel"><span class="brand-logo"><img src="assets/brands/gpixel.png" alt="Google Pixel"></span><span class="brand-name">Google Pixel</span></a>
+        <a class="brand-block" href="booking.html?brand=Motorola"><span class="brand-logo"><img src="assets/brands/motorola.png" alt="Motorola"></span><span class="brand-name">Motorola</span></a>
+        <a class="brand-block" href="booking.html?brand=Nokia"><span class="brand-logo"><img src="assets/brands/nokia.png" alt="Nokia"></span><span class="brand-name">Nokia</span></a>
+        <a class="brand-block" href="booking.html?brand=Asus"><span class="brand-logo"><img src="assets/brands/asus.png" alt="Asus"></span><span class="brand-name">Asus</span></a>
+        <a class="brand-block" href="booking.html?brand=Honor"><span class="brand-logo"><img src="assets/brands/Honor.png" alt="Honor"></span><span class="brand-name">Honor</span></a>
+        <a class="brand-block" href="booking.html?brand=iQOO"><span class="brand-logo"><img src="assets/brands/iqoo.png" alt="iQOO"></span><span class="brand-name">iQOO</span></a>
+        <a class="brand-block" href="booking.html?brand=Huawei"><span class="brand-logo"><img src="assets/brands/huawei.png" alt="Huawei"></span><span class="brand-name">Huawei</span></a>
+        <a class="brand-block" href="booking.html?brand=Infinix"><span class="brand-logo"><img src="assets/brands/infinix.png" alt="Infinix"></span><span class="brand-name">Infinix</span></a>
+        <a class="brand-block" href="booking.html?brand=Nothing"><span class="brand-logo"><img src="assets/brands/nothing.png" alt="Nothing"></span><span class="brand-name">Nothing</span></a>
+        <a class="brand-block" href="booking.html?brand=Lava"><span class="brand-logo"><img src="assets/brands/lava.png" alt="Lava"></span><span class="brand-name">Lava</span></a>
+        <a class="brand-block" href="booking.html?brand=Micromax"><span class="brand-logo"><img src="assets/brands/micromax.png" alt="Micromax"></span><span class="brand-name">Micromax</span></a>
+        <a class="brand-block" href="booking.html?brand=Tecno"><span class="brand-logo"><img src="assets/brands/tecno.png" alt="Tecno"></span><span class="brand-name">Tecno</span></a>
+        <a class="brand-block" href="booking.html?brand=LG"><span class="brand-logo"><img src="assets/brands/lg.png" alt="LG"></span><span class="brand-name">LG</span></a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section on-dim">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">How it works</span>
-      <h2>From "it's broken" to "it's fixed" — four simple steps.</h2>
+  <section class="section premium-proof"><div class="wrap reveal"><div class="stat-strip">
+    <div class="stat-cell"><strong>500+</strong><span>Devices restored</span></div><div class="stat-cell"><strong>4.8 / 5</strong><span>Customer rating</span></div><div class="stat-cell"><strong>6 mo</strong><span>Service warranty</span></div><div class="stat-cell"><strong>90%</strong><span>Same-day repairs</span></div>
+  </div></div></section>
+
+  <section class="section premium-services"><div class="wrap"><div class="section-head reveal"><span class="eyebrow">What we repair</span><h2>Every issue. One expert team.</h2><p>From a cracked screen to a phone that won't power on, we diagnose the real problem and fix it properly.</p></div>
+    <div class="grid-4 premium-problem-grid reveal">
+      <a class="problem-block" href="booking.html?issue=screen"><span class="stub-icon">▧</span><h3>Screen repair</h3><p>Cracks, lines, touch problems and display replacements.</p><b>Explore →</b></a>
+      <a class="problem-block" href="booking.html?issue=battery"><span class="stub-icon">ϟ</span><h3>Battery replacement</h3><p>Fast-draining batteries and unexpected shutdowns.</p><b>Explore →</b></a>
+      <a class="problem-block" href="booking.html?issue=charging"><span class="stub-icon">⌁</span><h3>Charging repair</h3><p>Loose ports, charging faults and power issues.</p><b>Explore →</b></a>
+      <a class="problem-block" href="booking.html?issue=water"><span class="stub-icon">◒</span><h3>Water damage</h3><p>Careful recovery and component-level repair.</p><b>Explore →</b></a>
     </div>
-    <div class="mini-steps">
-      <div class="reveal">
-        <div class="mini-step-num">1</div>
-        <h3>Tell us what's wrong</h3>
-        <p>Pick your brand, model, and the issue — takes under a minute.</p>
-      </div>
-      <div class="reveal">
-        <div class="mini-step-num">2</div>
-        <h3>Choose how to repair it</h3>
-        <p>Visit the shop, get pickup &amp; drop, or a technician at your door.</p>
-      </div>
-      <div class="reveal">
-        <div class="mini-step-num">3</div>
-        <h3>We diagnose &amp; repair</h3>
-        <p>Price confirmed before we start — genuine parts, tested after.</p>
-      </div>
-      <div class="reveal">
-        <div class="mini-step-num">4</div>
-        <h3>Get it back, warrantied</h3>
-        <p>Every repair is covered, so you're never left stranded again.</p>
-      </div>
-    </div>
-    <p class="reveal" style="margin-top:32px;"><a href="how-we-work.html" class="btn btn-ghost btn-sm">See the full process</a></p>
-  </div>
-</section>
+  </div></section>
 
-<section class="section">
-  <div class="wrap">
-    <div class="why-us-grid reveal">
-      <div class="why-seal">
-        <div class="why-seal-mark">
-          <svg viewBox="0 0 120 120">
-            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="3"/>
-            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1.2"/>
-            <path id="whySealArc" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
-            <text font-size="8.4" letter-spacing="2.2">
-              <textPath href="#whySealArc" startOffset="1%">RAJ TELECOM / CERTIFIED</textPath>
-            </text>
-            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6.5"/>
-          </svg>
-        </div>
-        <p>Every phone leaves with our name behind it.</p>
-      </div>
+  <section class="section premium-why"><div class="wrap"><div class="section-head reveal"><span class="eyebrow">Why choose Raj Telecom</span><h2>Repair service that works around you.</h2><p>We make it easy to get your device repaired, with honest communication at every step.</p></div>
+    <div class="why-grid reveal"><article class="why-card"><span class="why-icon"><img src="assets/why/phone_checking.png" alt=""></span><h3>Free diagnosis</h3><p>We find the real issue and give you the price before any repair begins.</p></article><article class="why-card"><span class="why-icon"><img src="assets/why/pickup_drop.png" alt=""></span><h3>Pickup &amp; drop</h3><p>Busy day? We collect your phone and return it repaired to your doorstep.</p></article><article class="why-card"><span class="why-icon"><img src="assets/why/home-service.png" alt=""></span><h3>Home service</h3><p>For eligible repairs, a technician can fix your phone at your home or office.</p></article><article class="why-card"><span class="why-icon"><img src="assets/why/quality-control.png" alt=""></span><h3>Quality warranty</h3><p>Every repair is tested and backed by our service warranty for confidence.</p></article></div>
+  </div></section>
 
-      <div class="why-list">
-        <span class="eyebrow">Why Raj Telecom</span>
-        <h2>The kind of repair shop you'd send your family to.</h2>
-
-        <div class="why-item">
-          <span class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Genuine parts, always</h3><p>Every part is sourced and tested before it goes into your phone — no shortcuts.</p></div>
-        </div>
-        <div class="why-item">
-          <span class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Most repairs, same day</h3><p>Walk in with a diagnosis appointment and walk out with a working phone.</p></div>
-        </div>
-        <div class="why-item">
-          <span class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Price before we start</h3><p>You approve the cost after diagnosis — never charged for anything you didn't agree to.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section on-dim" id="brands">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Start your repair</span>
-      <h2>Select your brand.</h2>
-      <p>Pick your phone's brand and we'll walk you through your model, the issue, and how you'd like it repaired.</p>
-    </div>
-
+  <section class="section on-dim premium-brands"><div class="wrap"><div class="section-head reveal"><span class="eyebrow">All major brands</span><h2>Your device is in experienced hands.</h2><p>We repair the brands you use every day, with parts and processes tailored to each device.</p></div>
     <div class="brand-grid reveal">
-      <!-- Drop logo files into assets/brands/ using the filenames below.
-           If a file is missing, the image fails silently and the letter
-           fallback (already in the alt/data attributes) still shows. -->
-      <a class="brand-block" href="booking.html?brand=Apple">
-        <span class="brand-logo"><img src="assets/brands/apple.svg" alt="Apple" onerror="this.parentElement.innerHTML='A'"></span><span class="brand-name">Apple</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Samsung">
-        <span class="brand-logo"><img src="assets/brands/samsung.svg" alt="Samsung" onerror="this.parentElement.innerHTML='S'"></span><span class="brand-name">Samsung</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=OnePlus">
-        <span class="brand-logo"><img src="assets/brands/oneplus.svg" alt="OnePlus" onerror="this.parentElement.innerHTML='O+'"></span><span class="brand-name">OnePlus</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Xiaomi">
-        <span class="brand-logo"><img src="assets/brands/xiaomi.svg" alt="Xiaomi" onerror="this.parentElement.innerHTML='Mi'"></span><span class="brand-name">Xiaomi</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Realme">
-        <span class="brand-logo"><img src="assets/brands/realme.svg" alt="Realme" onerror="this.parentElement.innerHTML='R'"></span><span class="brand-name">Realme</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Oppo">
-        <span class="brand-logo"><img src="assets/brands/oppo.svg" alt="Oppo" onerror="this.parentElement.innerHTML='O'"></span><span class="brand-name">Oppo</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Vivo">
-        <span class="brand-logo"><img src="assets/brands/vivo.svg" alt="Vivo" onerror="this.parentElement.innerHTML='V'"></span><span class="brand-name">Vivo</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Google%20Pixel">
-        <span class="brand-logo"><img src="assets/brands/google-pixel.svg" alt="Google Pixel" onerror="this.parentElement.innerHTML='G'"></span><span class="brand-name">Google Pixel</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Motorola">
-        <span class="brand-logo"><img src="assets/brands/motorola.svg" alt="Motorola" onerror="this.parentElement.innerHTML='M'"></span><span class="brand-name">Motorola</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Nokia">
-        <span class="brand-logo"><img src="assets/brands/nokia.svg" alt="Nokia" onerror="this.parentElement.innerHTML='N'"></span><span class="brand-name">Nokia</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Asus">
-        <span class="brand-logo"><img src="assets/brands/asus.svg" alt="Asus" onerror="this.parentElement.innerHTML='A'"></span><span class="brand-name">Asus</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=Honor">
-        <span class="brand-logo"><img src="assets/brands/honor.svg" alt="Honor" onerror="this.parentElement.innerHTML='H'"></span><span class="brand-name">Honor</span>
-      </a>
-      <a class="brand-block" href="booking.html?brand=iQOO">
-        <span class="brand-logo"><img src="assets/brands/iqoo.svg" alt="iQOO" onerror="this.parentElement.innerHTML='iQ'"></span><span class="brand-name">iQOO</span>
-      </a>
-      <a class="brand-block more-brands" href="booking.html?brand=other">
-        <span class="brand-logo">+</span><span class="brand-name">More Brands</span>
-      </a>
+      <a class="brand-block" href="booking.html?brand=Apple"><span class="brand-logo"><img src="assets/brands/iphone.png" alt="Apple"></span><span class="brand-name">Apple</span></a>
+      <a class="brand-block" href="booking.html?brand=Samsung"><span class="brand-logo"><img src="assets/brands/samsung.png" alt="Samsung"></span><span class="brand-name">Samsung</span></a>
+      <a class="brand-block" href="booking.html?brand=OnePlus"><span class="brand-logo"><img src="assets/brands/oneplus.png" alt="OnePlus"></span><span class="brand-name">OnePlus</span></a>
+      <a class="brand-block" href="booking.html?brand=Xiaomi"><span class="brand-logo"><img src="assets/brands/xiaomi.png" alt="Xiaomi"></span><span class="brand-name">Xiaomi</span></a>
+      <a class="brand-block" href="booking.html?brand=Oppo"><span class="brand-logo"><img src="assets/brands/oppo.png" alt="Oppo"></span><span class="brand-name">Oppo</span></a>
+      <a class="brand-block" href="booking.html?brand=Vivo"><span class="brand-logo"><img src="assets/brands/vivo.png" alt="Vivo"></span><span class="brand-name">Vivo</span></a>
     </div>
-  </div>
-</section>
+  </div></section>
 
+  <section class="section premium-process"><div class="wrap"><div class="process-top reveal"><div><span class="eyebrow">Simple by design</span><h2>Good repair should feel easy.</h2></div><a href="how-we-work.html" class="text-action">See how it works <span>→</span></a></div>
+    <div class="mini-steps reveal"><div class="mini-step"><div class="mini-step-num">01</div><h3>Tell us the issue</h3><p>Book a time and let us know what isn't working.</p></div><div class="mini-step"><div class="mini-step-num">02</div><h3>Approve your quote</h3><p>We diagnose first, then confirm the cost before we begin.</p></div><div class="mini-step"><div class="mini-step-num">03</div><h3>Pick up with confidence</h3><p>Your device is tested, cleaned and backed by warranty.</p></div></div>
+  </div></section>
 
-<footer>
-  <div class="foot-tear"></div>
-  <div class="wrap">
-    <div class="foot-top reveal">
-      <div class="foot-brand">
-        <a href="index.html" class="logo">
-          <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
-        </a>
-        <p>Certified mobile phone repair — screens, batteries, water damage and more. Fixed while you wait.</p>
-        <div class="foot-seal">
-          <svg viewBox="0 0 120 120">
-            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="2.5"/>
-            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1"/>
-            <path id="footSealArc" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
-            <text font-size="7.5" letter-spacing="2">
-              <textPath href="#footSealArc" startOffset="1%">GENUINE PARTS / WARRANTIED</textPath>
-            </text>
-            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6"/>
-          </svg>
-          <span>Every repair, certified.</span>
-        </div>
-      </div>
+  <section class="section premium-cta"><div class="wrap"><div class="cta-banner reveal"><div><span class="tl-tag">A better repair experience</span><h2>Let's get your device working again.</h2><p>Book in less than a minute, or walk in during shop hours.</p></div><a href="booking.html" class="btn btn-primary">Book a repair <span>→</span></a></div></div></section>
 
-      <div class="foot-links">
-        <div class="foot-col">
-          <h4>Explore</h4>
-          <a href="index.html">Home</a>
-          <a href="services.html">Our Services</a>
-          <a href="how-we-work.html">How We Work</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact Us</a>
-        </div>
-        <div class="foot-col">
-          <h4>Contact</h4>
-          <span>+91 00000 00000</span>
-          <a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a>
-          <span>Mon–Sat, 10 AM – 8 PM</span>
-        </div>
-        <div class="foot-col">
-          <h4>Shop</h4>
- <span>Raj Telecom, Santosh Bhavan</span>
-          <span>Nalasopara East, Maharashtra</span>
-        </div>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2026 Raj Telecom. All rights reserved.</span>
-      <span>Ticket-based repair, since day one.</span>
-    </div>
-  </div>
-</footer>
-
-<div class="mobile-callbar">
-  <a href="booking.html" class="btn btn-primary btn-sm">Book a Slot</a>
-</div>
-
-<script src="main.js"></script>
+  <footer><div class="wrap"><div class="foot-top reveal"><div class="foot-brand"><a href="index.html" class="logo"><span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span></a><p>Premium mobile repair, with the clarity and care your device deserves.</p></div><div class="foot-links"><div class="foot-col"><h4>Explore</h4><a href="services.html">Services</a><a href="how-we-work.html">How it works</a><a href="about.html">About Raj Telecom</a></div><div class="foot-col"><h4>Contact</h4><a href="tel:+910000000000">+91 00000 00000</a><a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a></div><div class="foot-col"><h4>Visit</h4><span>Raj Telecom, Santosh Bhavan</span><span>Nalasopara East, Maharashtra</span><span>Mon–Sat, 10 AM–8 PM</span></div></div></div><div class="foot-bottom"><span>© 2026 Raj Telecom. All rights reserved.</span><span>Repairing better, every day.</span></div></div></footer>
+  <div class="mobile-callbar"><a href="tel:+910000000000" class="btn btn-ghost btn-sm">Call us</a><a href="booking.html" class="btn btn-primary btn-sm">Book a repair</a></div>
+  <script src="main.js"></script>
+  <script src="site.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var rail = document.querySelector('[data-brand-rail]');
+      var previous = document.querySelector('[data-brand-prev]');
+      var next = document.querySelector('[data-brand-next]');
+      if (rail && previous && next) {
+        previous.addEventListener('click', function () { rail.scrollBy({ left: -320, behavior: 'smooth' }); });
+        next.addEventListener('click', function () { rail.scrollBy({ left: 320, behavior: 'smooth' }); });
+      }
+      var process = document.querySelector('.premium-process');
+      if (!process) return;
+      var eyebrow = process.querySelector('.eyebrow');
+      var title = process.querySelector('h2');
+      var steps = process.querySelectorAll('.mini-step');
+      if (eyebrow) eyebrow.textContent = 'Three simple steps';
+      if (title) title.textContent = 'From broken to working.';
+      var content = [
+        ['1', 'Book or walk in', 'Tell us your phone brand and the problem. It takes less than a minute.'],
+        ['2', 'Get a clear price', 'We check your device and explain exactly what needs fixing before any work starts.'],
+        ['3', 'Use your phone again', 'We test every repair and give you a warranty before your phone leaves our centre.']
+      ];
+      steps.forEach(function (step, index) {
+        var item = content[index]; if (!item) return;
+        step.querySelector('.mini-step-num').textContent = item[0];
+        step.querySelector('h3').textContent = item[1];
+        step.querySelector('p').textContent = item[2];
+      });
+    });
+  </script>
 </body>
 </html>

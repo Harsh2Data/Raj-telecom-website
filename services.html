@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{if(localStorage.getItem('rt-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="assets/raj-telecom-logo.png">
 <title>Our Services — Raj Telecom</title>
 <meta name="description" content="End-to-end mobile repair — every issue we fix, and every way you can get it done: visit the shop, doorstep pickup & drop, or a technician at your home.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="premium.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
+<script>document.body.classList.toggle('is-home', /(^|\/)(index\.html)?$/.test(location.pathname));</script>
 
 <nav class="site-nav">
   <div class="nav-inner wrap">
@@ -18,13 +22,20 @@
       <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
     </a>
     <div class="nav-links" id="navLinks">
+      <div class="nav-links-head">
+        <a href="index.html" class="logo"><span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span></a>
+        <button type="button" class="nav-close" id="navClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
       <a href="index.html">Home</a>
-      <a href="services.html" aria-current="page">Our Services</a>
-      <a href="how-we-work.html">How We Work</a>
-      <a href="about.html">About Us</a>
-      <a href="contact.html">Contact Us</a>
+      <a href="services.html" aria-current="page">Services</a>
+      <a href="how-we-work.html">How it works</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="booking.html" class="nav-book-mobile">Book Repair</a>
     </div>
     <div class="nav-cta">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <a class="nav-book" href="booking.html">Book repair</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle"><span></span></button>
     </div>
   </div>
@@ -46,7 +57,7 @@
 
     <div class="grid-4">
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 8l3 3-3 3"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/broken-display.png" alt=""></span>
         <h3>Broken Display</h3>
         <p>Cracked glass or a display that won't show anything right.</p>
       </div>
@@ -56,22 +67,22 @@
         <p>Screen doesn't respond, or responds in the wrong place.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/phone-charging.png" alt=""></span>
         <h3>Charging</h3>
         <p>Won't charge, charges slowly, or drains while plugged in.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 5.8 6 10.3a6 6 0 1 1-12 0c0-4.5 6-10.3 6-10.3z"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/water-damage.png" alt=""></span>
         <h3>Water Damage</h3>
         <p>Dropped in water — bring it in before switching it on.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/lost-data.png" alt=""></span>
         <h3>Lost Data</h3>
         <p>Photos, contacts, or files that suddenly disappeared.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/speaker-repair.png" alt=""></span>
         <h3>Sound</h3>
         <p>Speaker crackling, muffled, or no sound at all.</p>
       </div>
@@ -81,12 +92,12 @@
         <p>Loose connection or a port that won't hold the cable.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/sensor.png" alt=""></span>
         <h3>Sensor</h3>
         <p>Proximity, fingerprint, or face-unlock not responding.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 14l5-5 3 3 5-7 3 4"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/phone-back-panel.png" alt=""></span>
         <h3>Broken Panel</h3>
         <p>Cracked or dented back panel or frame.</p>
       </div>
@@ -96,12 +107,12 @@
         <p>Headphone jack loose, silent, or only working one side.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/back-camera.png" alt=""></span>
         <h3>Camera</h3>
         <p>Blurry photos, black screen, or a cracked lens.</p>
       </div>
       <div class="problem-block reveal">
-        <span class="stub-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg></span>
+        <span class="stub-icon repair-image"><img src="assets/repairs/phone-mic.png" alt=""></span>
         <h3>Mic</h3>
         <p>People can't hear you clearly on calls or recordings.</p>
       </div>
@@ -193,61 +204,48 @@
 </section>
 
 <footer>
-  <div class="foot-tear"></div>
   <div class="wrap">
     <div class="foot-top reveal">
       <div class="foot-brand">
         <a href="index.html" class="logo">
           <span class="logo-img"><img src="assets/raj-telecom-logo.png" alt="Raj Telecom"></span>
         </a>
-        <p>Certified mobile phone repair — screens, batteries, water damage and more. Fixed while you wait.</p>
-        <div class="foot-seal">
-          <svg viewBox="0 0 120 120">
-            <circle class="stamp-ring" cx="60" cy="60" r="52" stroke-width="2.5"/>
-            <circle class="stamp-ring" cx="60" cy="60" r="43" stroke-width="1"/>
-            <path id="footSealArc" d="M60,17 A43,43 0 1,1 59.9,17" fill="none"/>
-            <text font-size="7.5" letter-spacing="2">
-              <textPath href="#footSealArc" startOffset="1%">GENUINE PARTS / WARRANTIED</textPath>
-            </text>
-            <path class="stamp-check" d="M40 61 L53 74 L82 44" stroke-width="6"/>
-          </svg>
-          <span>Every repair, certified.</span>
-        </div>
+        <p>Premium mobile repair, with the clarity and care your device deserves.</p>
       </div>
 
       <div class="foot-links">
         <div class="foot-col">
           <h4>Explore</h4>
-          <a href="index.html">Home</a>
-          <a href="services.html">Our Services</a>
-          <a href="how-we-work.html">How We Work</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact Us</a>
+          <a href="services.html">Services</a>
+          <a href="how-we-work.html">How it works</a>
+          <a href="about.html">About Raj Telecom</a>
         </div>
         <div class="foot-col">
           <h4>Contact</h4>
-          <span>+91 00000 00000</span>
+          <a href="tel:+910000000000">+91 00000 00000</a>
           <a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a>
-          <span>Mon–Sat, 10 AM – 8 PM</span>
         </div>
         <div class="foot-col">
-          <h4>Shop</h4>
-       <span>Raj Telecom, Santosh Bhavan</span>
+          <h4>Visit</h4>
+          <span>Raj Telecom, Santosh Bhavan</span>
           <span>Nalasopara East, Maharashtra</span>
+          <span>Mon–Sat, 10 AM–8 PM</span>
         </div>
       </div>
     </div>
     <div class="foot-bottom">
       <span>© 2026 Raj Telecom. All rights reserved.</span>
-      <span>Ticket-based repair, since day one.</span>
+      <span>Repairing better, every day.</span>
     </div>
   </div>
 </footer>
 
 <div class="mobile-callbar">
-  <a href="booking.html" class="btn btn-primary btn-sm">Book a Slot</a>
+  <a href="tel:+910000000000" class="btn btn-ghost btn-sm">Call us</a>
+  <a href="booking.html" class="btn btn-primary btn-sm">Book a repair</a>
 </div>
 
 <script src="main.js"></script>
+<script src="site.js"></script>
 </body>
 </html>

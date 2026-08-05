@@ -1,0 +1,192 @@
+/* ==========================================================================
+   Raj Telecom — Dark mode
+   Manual toggle only (no prefers-color-scheme auto-detect). Theme is set
+   as data-theme="dark" on <html> by an inline pre-paint script in <head>
+   (reads localStorage 'rt-theme') and flipped by the button in main.js.
+
+   Approach: style.css/premium.css tokens like --ink and --white are
+   reused as BOTH text colour and background colour in different places
+   (e.g. --ink is body text AND the footer/cta-banner background), so
+   redefining them globally would break those surfaces. Instead this file
+   defines its own dark-only tokens and overrides each component's actual
+   selectors directly — more verbose, but doesn't risk the existing
+   overloaded variables.
+
+   Left untouched on purpose (already dark, or already theme-agnostic,
+   in both modes): footer, .premium-hero (home hero), .premium-process,
+   .cta-banner (blue gradient + white text). Brand logo chips
+   (.brand-block, .brand-logo) and repair-icon chips (.stub-icon,
+   .why-icon, .service-icon, .ticket-device-icon) are also left on their
+   light backdrop deliberately — several hold PNG photos/wordmarks that
+   assume a light plate behind them.
+   ========================================================================== */
+
+[data-theme="dark"] {
+  --d-bg: #0b0d12;
+  --d-bg-alt: #12141b;
+  --d-surface: #14161d;
+  --d-surface-2: #1b1e27;
+  --d-border: rgba(255,255,255,.10);
+  --d-border-soft: rgba(255,255,255,.06);
+  --d-text: #EDEFF4;
+  --d-text-soft: #C7CCDA;
+  --d-muted: #8991A3;
+  color-scheme: dark;
+}
+
+/* ---------------- Global ---------------- */
+[data-theme="dark"] body{background:var(--d-bg);color:var(--d-text)}
+[data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:var(--d-text)}
+[data-theme="dark"] p{color:var(--d-text-soft)}
+[data-theme="dark"] .section{border-bottom-color:var(--d-border-soft)}
+[data-theme="dark"] .section.on-dim{background:var(--d-bg-alt)}
+[data-theme="dark"] .premium-services,
+[data-theme="dark"] .premium-why,
+[data-theme="dark"] .premium-proof{background:var(--d-bg)}
+
+/* ---------------- Buttons ---------------- */
+[data-theme="dark"] .btn-ghost{color:var(--d-text);border-color:var(--d-border)}
+[data-theme="dark"] .btn-ghost:hover{border-color:var(--d-text)}
+[data-theme="dark"] .btn-dark{background:var(--d-surface-2);color:var(--d-text)}
+[data-theme="dark"] .btn-dark:hover{background:#242833}
+
+/* ---------------- Theme-toggle icon swap ---------------- */
+[data-theme="dark"] .theme-toggle .icon-moon{display:none}
+[data-theme="dark"] .theme-toggle .icon-sun{display:block}
+
+/* ---------------- Nav (inner pages: always-solid bar) ---------------- */
+[data-theme="dark"] .site-nav{background:rgba(11,13,18,.85);border-bottom-color:var(--d-border);box-shadow:0 8px 25px rgba(0,0,0,.35)}
+[data-theme="dark"] .nav-links a{color:var(--d-text-soft)}
+[data-theme="dark"] .nav-links a:hover{color:#fff}
+[data-theme="dark"] .nav-links a[aria-current=page]{color:#60A5FA}
+[data-theme="dark"] .nav-toggle,[data-theme="dark"] .theme-toggle,[data-theme="dark"] .nav-close{border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .nav-toggle:hover,[data-theme="dark"] .theme-toggle:hover,[data-theme="dark"] .nav-close:hover{border-color:#60A5FA;background:rgba(96,165,250,.12)}
+[data-theme="dark"] .nav-toggle span,[data-theme="dark"] .nav-toggle span::before,[data-theme="dark"] .nav-toggle span::after{background:var(--d-text)}
+
+/* Home page: post-scroll glass bar should also go dark (pre-scroll is
+   already white-on-dark-hero and needs no change in either theme) */
+[data-theme="dark"] body.is-home .site-nav.scrolled{background:rgba(11,13,18,.85);border-bottom-color:var(--d-border);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-links a{color:var(--d-text-soft)}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-links a:hover{color:#fff}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-links a[aria-current=page]{color:#60A5FA}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-toggle,
+[data-theme="dark"] body.is-home .site-nav.scrolled .theme-toggle{border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-toggle:hover,
+[data-theme="dark"] body.is-home .site-nav.scrolled .theme-toggle:hover{border-color:#60A5FA;background:rgba(96,165,250,.12)}
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-toggle span,
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-toggle span::before,
+[data-theme="dark"] body.is-home .site-nav.scrolled .nav-toggle span::after{background:var(--d-text)}
+
+/* Mobile fullscreen menu */
+@media(max-width:760px){
+  [data-theme="dark"] .nav-links{background:rgba(11,13,18,.97)}
+  [data-theme="dark"] .nav-links-head{border-bottom-color:var(--d-border-soft)}
+  [data-theme="dark"] .nav-links a,[data-theme="dark"] .nav-links a.nav-book-mobile{color:var(--d-text);border-bottom-color:var(--d-border-soft)}
+  [data-theme="dark"] .nav-links a:hover{color:#60A5FA}
+  [data-theme="dark"] .nav-links a[aria-current=page]{color:#60A5FA}
+  [data-theme="dark"] .nav-links a.nav-book-mobile{color:#60A5FA}
+  [data-theme="dark"] body.is-home .site-nav .nav-links a{color:var(--d-text)}
+  [data-theme="dark"] body.is-home .site-nav .nav-links a[aria-current=page]{color:#60A5FA}
+}
+
+/* ---------------- Page hero (inner pages) ---------------- */
+[data-theme="dark"] .page-hero{background:linear-gradient(135deg,#12141b,#0b0d12);border-bottom-color:var(--d-border-soft)}
+[data-theme="dark"] .page-hero .lead{color:var(--d-text-soft)}
+
+/* ---------------- Brand rail ---------------- */
+[data-theme="dark"] .brand-rail-section{background:var(--d-bg-alt)}
+[data-theme="dark"] .rail-arrow{background:var(--d-surface);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .rail-arrow:hover{background:#2563EB;border-color:#2563EB;color:#fff}
+
+/* ---------------- Stat strip ---------------- */
+[data-theme="dark"] .stat-strip{background:var(--d-surface);border-color:var(--d-border);box-shadow:none}
+[data-theme="dark"] .stat-cell span{color:var(--d-muted)}
+
+/* ---------------- Problem grid / why cards / service stubs ---------------- */
+[data-theme="dark"] .premium-problem-grid .problem-block,
+[data-theme="dark"] .problem-block{background:var(--d-surface);border-color:var(--d-border)}
+[data-theme="dark"] .problem-block.more{background:var(--d-surface-2)}
+[data-theme="dark"] .why-card{background:var(--d-surface);border-color:var(--d-border)}
+[data-theme="dark"] .stub{background:var(--d-surface);border-color:var(--d-border)}
+[data-theme="dark"] .stub-price{color:var(--d-text)}
+[data-theme="dark"] .stub-time,[data-theme="dark"] .stub-foot{color:var(--d-muted);border-color:var(--d-border-soft)}
+
+/* ---------------- Ticket (hero showcase + booking confirmation) ---------------- */
+[data-theme="dark"] .ticket{background:var(--d-surface);border-color:var(--d-border);box-shadow:none}
+[data-theme="dark"] .ticket-notch{background:var(--d-bg);border-color:var(--d-border)}
+[data-theme="dark"] .ticket-perf{border-top-color:var(--d-border)}
+[data-theme="dark"] .ticket-device-icon{background:var(--d-surface-2)}
+[data-theme="dark"] .ticket-device-icon svg{color:var(--d-text)}
+[data-theme="dark"] .ticket-device-issue{color:var(--d-muted)}
+[data-theme="dark"] .progress-track{background:var(--d-surface-2)}
+[data-theme="dark"] .ticket-id,[data-theme="dark"] .ticket-meta,[data-theme="dark"] .progress-labels{color:var(--d-muted)}
+[data-theme="dark"] .ticket-id strong,[data-theme="dark"] .ticket-meta strong,[data-theme="dark"] .progress-labels .active{color:var(--d-text)}
+/* mix-blend-mode:multiply crushes to near-black on a dark surface */
+[data-theme="dark"] .ticket-stamp{mix-blend-mode:normal;color:#F87171}
+
+/* ---------------- Timeline / FAQ (how-we-work) ---------------- */
+[data-theme="dark"] .tl-num{background:var(--d-surface);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .tl-content p{color:var(--d-text-soft)}
+[data-theme="dark"] .faq-item,[data-theme="dark"] .faq-item:first-child{border-color:var(--d-border-soft)}
+[data-theme="dark"] .faq-q{color:var(--d-text);background:transparent}
+[data-theme="dark"] .faq-a{color:var(--d-text-soft)}
+
+/* ---------------- Forms (contact + booking) ---------------- */
+[data-theme="dark"] .field label{color:var(--d-muted)}
+[data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .field textarea{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .field input:focus,[data-theme="dark"] .field select:focus,[data-theme="dark"] .field textarea:focus{border-color:#60A5FA}
+[data-theme="dark"] .field input::placeholder,[data-theme="dark"] .field textarea::placeholder{color:var(--d-muted)}
+[data-theme="dark"] .form-note{color:var(--d-muted)}
+
+/* ---------------- Cards: about / contact ---------------- */
+[data-theme="dark"] .value-card,[data-theme="dark"] .people-card,[data-theme="dark"] .info-card{background:var(--d-surface);border-color:var(--d-border)}
+[data-theme="dark"] .avatar{background:var(--d-surface-2);color:var(--d-text)}
+[data-theme="dark"] .info-row{border-color:var(--d-border-soft)}
+[data-theme="dark"] .info-row span{color:var(--d-muted)}
+[data-theme="dark"] .map-box{background:repeating-linear-gradient(45deg,var(--d-surface) 0 10px,var(--d-bg) 10px 20px);border-color:var(--d-border);color:var(--d-muted)}
+
+/* ---------------- Booking wizard ---------------- */
+[data-theme="dark"] .wizard-steps{background:var(--d-surface);border-color:var(--d-border)}
+[data-theme="dark"] .wizard-step-num{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-muted)}
+[data-theme="dark"] .wizard-step-label{color:var(--d-muted)}
+[data-theme="dark"] .wizard-step.active .wizard-step-label{color:var(--d-text)}
+[data-theme="dark"] .wizard-step-line{background:var(--d-border)}
+[data-theme="dark"] .booking-reassurance{background:rgba(37,99,235,.15);color:var(--d-text-soft)}
+[data-theme="dark"] .booking-reassurance strong{color:var(--d-text)}
+[data-theme="dark"] .wizard-panel{background:var(--d-surface);border-color:var(--d-border);box-shadow:none}
+[data-theme="dark"] .wizard-panel>p.wizard-sub{color:var(--d-text-soft)}
+[data-theme="dark"] .wizard-actions{border-color:var(--d-border-soft)}
+
+[data-theme="dark"] .choice-block,[data-theme="dark"] .model-row,[data-theme="dark"] .option-card,[data-theme="dark"] .slot-chip{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .choice-block:hover,[data-theme="dark"] .model-row:hover,[data-theme="dark"] .option-card:hover,[data-theme="dark"] .slot-chip:hover{border-color:#60A5FA}
+[data-theme="dark"] .choice-block.selected,[data-theme="dark"] .model-row.selected,[data-theme="dark"] .option-card.selected,[data-theme="dark"] .slot-chip.selected{border-color:#2563EB;background:rgba(37,99,235,.2)}
+[data-theme="dark"] .choice-block.other-block{color:var(--d-muted)}
+[data-theme="dark"] .option-radio{background:var(--d-surface-2);border-color:var(--d-border)}
+[data-theme="dark"] .option-tag{background:var(--d-surface);color:var(--d-muted)}
+[data-theme="dark"] .option-card.selected .option-tag{background:var(--d-surface-2);color:var(--d-text)}
+[data-theme="dark"] .slot-day,[data-theme="dark"] .model-row .arrow{color:var(--d-muted)}
+[data-theme="dark"] .picked-chip{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .picked-chip button{background:var(--d-surface);border-color:var(--d-border);color:var(--d-muted)}
+[data-theme="dark"] .summary-list{border-color:var(--d-border)}
+[data-theme="dark"] .summary-row{border-color:var(--d-border-soft)}
+[data-theme="dark"] .summary-row span:first-child{color:var(--d-muted)}
+[data-theme="dark"] .summary-row span:last-child{color:var(--d-text)}
+[data-theme="dark"] .success-note{background:var(--d-surface-2);color:var(--d-text-soft)}
+[data-theme="dark"] .field-error{color:#F87171}
+
+/* Service selection step (search + multi-select list) */
+[data-theme="dark"] .service-search input{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .service-search svg{color:var(--d-muted)}
+[data-theme="dark"] .service-row{background:var(--d-surface-2);border-color:var(--d-border)}
+[data-theme="dark"] .service-row:hover{border-color:#60A5FA}
+[data-theme="dark"] .service-row.selected{border-color:#2563EB;background:rgba(37,99,235,.2)}
+[data-theme="dark"] .service-name{color:var(--d-text)}
+[data-theme="dark"] .service-toggle{background:var(--d-surface);border-color:var(--d-border);color:#60A5FA}
+[data-theme="dark"] .service-empty{color:var(--d-muted)}
+
+/* ---------------- Floating communication widget ---------------- */
+[data-theme="dark"] .communication-panel{background:var(--d-surface);border-color:var(--d-border);box-shadow:0 20px 48px rgba(0,0,0,.5)}
+[data-theme="dark"] .communication-panel>span{color:var(--d-muted)}
+[data-theme="dark"] .communication-action{color:var(--d-text)}
+[data-theme="dark"] .communication-action:hover{background:var(--d-surface-2)}
+[data-theme="dark"] .communication-action i{background:var(--d-surface-2)}

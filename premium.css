@@ -1,0 +1,307 @@
+/* Premium mobile repair redesign — shared layer over the existing functional CSS */
+:root{--ink:#0b1020;--ink-2:#111a31;--blue:#5468ff;--cyan:#54d6ff;--mist:#f4f6fb;--line:#e5e8f1;--copy:#59637a;--display:"Plus Jakarta Sans",sans-serif;--body:"DM Sans",sans-serif}
+body{font-family:var(--body);color:var(--ink);background:#fff}body::before{display:none}h1,h2,h3,h4,.logo{font-family:var(--display)}p{color:var(--copy)}.wrap{max-width:1200px;padding:0 28px}.section{padding:104px 0;border:0}.section.on-dim{background:var(--mist)}.section-head{max-width:620px;margin-bottom:44px}.section-head h2{font-size:clamp(2rem,4vw,3.35rem);letter-spacing:-.055em}.section-head p{font-size:1.05rem;line-height:1.7}.eyebrow{font-family:var(--body);font-weight:700;color:var(--blue);letter-spacing:.12em;font-size:.72rem}.eyebrow::before{width:22px;background:var(--blue)}
+
+/* Nav rules consolidated below in the NAVIGATION SYSTEM block */
+
+.premium-hero{position:relative;overflow:hidden;background:linear-gradient(115deg,#0b1020 0%,#101937 52%,#172650 100%);color:#fff;min-height:650px}.premium-hero:before{content:"";position:absolute;width:760px;height:760px;border-radius:50%;right:-260px;top:-350px;background:radial-gradient(circle,rgba(84,214,255,.24),transparent 65%)}.premium-hero-grid{min-height:650px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;position:relative}.hero-copy{padding:70px 0}.premium-kicker{color:#a9dff5;font-size:.74rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;display:flex;align-items:center;gap:10px}.premium-kicker i{width:8px;height:8px;background:#8af1a9;border-radius:50%;box-shadow:0 0 0 5px rgba(138,241,169,.13)}.hero-copy h1{color:#fff;font-size:clamp(3rem,5.6vw,5.1rem);line-height:.99;letter-spacing:-.07em;max-width:650px;margin:24px 0}.hero-copy h1 em{font-style:normal;color:var(--cyan)}.hero-copy>p{color:#bdc7e1;font-size:1.1rem;line-height:1.72;max-width:510px}.hero-ctas{display:flex;align-items:center;gap:24px;margin-top:34px}.btn{border-radius:12px;padding:14px 20px;font-family:var(--body);font-weight:700}.btn-primary{background:var(--blue);box-shadow:0 12px 28px rgba(84,104,255,.28)}.btn-primary:hover{background:#4056f5}.text-action{color:var(--ink);font-weight:700;font-size:.93rem}.premium-hero .text-action{color:#fff}.text-action span{color:var(--cyan);margin-left:5px;font-size:1.1rem}.hero-trust{display:flex;flex-wrap:wrap;align-items:center;gap:11px 16px;margin-top:38px;color:#dce3f7;font-size:.83rem}.hero-trust>span{color:#ffca55;letter-spacing:2px}.hero-trust small{color:#8492b5;padding-left:16px;border-left:1px solid #4a5779}.hero-device{height:590px;position:relative;display:flex;align-items:center;justify-content:center}.hero-device>img{max-height:500px;max-width:100%;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 38px 28px rgba(0,0,0,.38))}.device-orbit{position:absolute;border:1px solid rgba(131,194,255,.2);border-radius:50%}.orbit-one{width:470px;height:470px}.orbit-two{width:620px;height:620px;border-color:rgba(131,194,255,.1)}.repair-chip,.ready-chip{z-index:3;position:absolute;background:rgba(255,255,255,.95);color:var(--ink);box-shadow:0 20px 40px rgba(0,0,0,.18);border-radius:14px}.repair-chip{left:4%;top:20%;padding:14px 20px;display:flex;align-items:center;gap:12px;font-size:.76rem;font-weight:700;line-height:1.35}.repair-chip b{font-size:1.1rem;color:var(--blue)}.ready-chip{right:-3%;bottom:20%;padding:13px 18px;display:flex;align-items:center;gap:10px;font-size:.75rem;line-height:1.45}.ready-chip i{height:27px;width:27px;display:grid;place-items:center;border-radius:50%;background:#d8f8e3;color:#16874d;font-style:normal;font-weight:700}.ready-chip b{font-weight:800}
+
+.premium-proof{padding:0;background:#fff;position:relative;z-index:4}.premium-proof .wrap{transform:translateY(-1px)}.stat-strip{border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 35px rgba(20,34,75,.05);background:#fff;overflow:hidden}.stat-cell{padding:28px 24px}.stat-cell strong{font-family:var(--display);font-size:1.55rem;letter-spacing:-.04em}.stat-cell span{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:.78rem;color:var(--copy);margin-top:4px}.stat-icon{display:none}
+.premium-services{background:#fff}.premium-problem-grid{gap:16px}.premium-problem-grid .problem-block{display:block;min-height:255px;padding:28px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.2s ease;box-shadow:none}.premium-problem-grid .problem-block:hover{transform:translateY(-5px);border-color:#b9c3ff;box-shadow:0 18px 30px rgba(43,61,131,.1)}.premium-problem-grid .stub-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:13px;background:#edf0ff;color:var(--blue);font-size:1.7rem;margin-bottom:30px}.premium-problem-grid h3{font-size:1.1rem;margin-bottom:8px}.premium-problem-grid p{font-size:.9rem;line-height:1.6;margin-bottom:22px}.premium-problem-grid b{font-size:.8rem;color:var(--blue)}
+.premium-brands{padding:94px 0}.brand-grid{grid-template-columns:repeat(6,1fr);gap:14px}.brand-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 10px}.brand-block:hover{border-color:#bbc5ff;box-shadow:0 12px 25px rgba(34,49,110,.1);transform:translateY(-4px)}.brand-logo{background:#f6f7fb;border-radius:11px}.brand-name{font-size:.8rem}
+.premium-process{background:var(--ink);color:#fff}.premium-process h2,.premium-process h3{color:#fff}.premium-process .eyebrow{color:#91dfff}.premium-process .eyebrow:before{background:#91dfff}.premium-process .text-action{color:#fff}.process-top{display:flex;align-items:end;justify-content:space-between;margin-bottom:52px}.process-top h2{font-size:clamp(2rem,4vw,3.3rem);letter-spacing:-.055em;margin-top:15px}.mini-steps{grid-template-columns:repeat(3,1fr);gap:52px}.mini-steps::before{display:none}.mini-step{position:relative}.mini-step:not(:last-child):after{content:"";position:absolute;top:20px;left:78px;right:-28px;border-top:1px dashed rgba(255,255,255,.26)}.mini-step-num{background:transparent;border:1px solid #526186;color:#9ce7ff;width:42px;height:42px;font-size:.72rem;margin-bottom:24px}.mini-step h3{font-size:1.1rem;margin-bottom:8px}.mini-step p{color:#aeb9d3;font-size:.9rem;max-width:280px}.premium-cta{padding:86px 0}.tl-tag{color:var(--blue);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+/* CTA banner: solid blue gradient with guaranteed-contrast text — this was
+   previously a near-white gradient background while the text (inherited
+   from style.css's dark-theme .cta-banner rule) stayed near-white too,
+   making it almost unreadable. Now background and text are set together. */
+.cta-banner{border-radius:22px;background:linear-gradient(115deg,#2563EB,#1D4ED8);border:0;padding:48px 52px;box-shadow:0 22px 48px rgba(37,99,235,.22)}
+.cta-banner h2{color:#fff;font-size:clamp(1.8rem,3vw,2.65rem);letter-spacing:-.055em;margin:12px 0}
+.cta-banner p{color:rgba(255,255,255,.88);margin:0}
+.cta-banner .tl-tag{color:#BFDBFE}
+.cta-banner .btn-primary{background:#fff;color:#2563EB;box-shadow:0 10px 25px rgba(15,23,42,.15);transition:all .35s ease}
+.cta-banner .btn-primary:hover{background:#fff;transform:scale(1.03);box-shadow:0 16px 35px rgba(15,23,42,.2)}
+footer{background:#080d1b;padding-top:0}.foot-top{padding:60px 0 42px}.foot-brand p{color:#9aa8c6}.foot-links{gap:24px}.foot-col h4{font-family:var(--body);color:#647291}.foot-col a,.foot-col span{color:#d8dff0}.foot-bottom{border-color:#202b45}.mobile-callbar{display:none}
+
+/* Strong mobile-first layout */
+@media(max-width:760px){.wrap{padding:0 20px}.logo-img img{height:32px}.premium-hero{min-height:auto}.premium-hero-grid{display:flex;flex-direction:column;align-items:stretch;min-height:0}.hero-copy{padding:58px 0 24px}.hero-copy h1{font-size:clamp(2.8rem,13vw,4rem);margin:18px 0}.hero-copy>p{font-size:1rem}.hero-ctas{gap:17px;margin-top:28px}.hero-trust{margin-top:28px;font-size:.75rem;gap:8px 12px}.hero-trust small{border:0;padding:0;width:100%}.hero-device{height:350px;order:2}.hero-device>img{max-height:320px}.orbit-one{width:280px;height:280px}.orbit-two{width:360px;height:360px}.repair-chip{left:1%;top:7%;padding:11px 13px}.ready-chip{right:-5px;bottom:7%;padding:10px 12px}.section{padding:68px 0}.section-head{margin-bottom:30px}.section-head h2{font-size:2.15rem}.section-head p{font-size:.95rem}.premium-proof{padding:0}.stat-strip{border-radius:0;border-left:0;border-right:0;display:grid;grid-template-columns:repeat(2,1fr)}.stat-cell{padding:20px 12px;border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}.stat-cell:nth-child(2n){border-right:0!important}.stat-cell:nth-child(n+3){border-bottom:0!important}.stat-cell strong{font-size:1.3rem}.premium-problem-grid{grid-template-columns:1fr 1fr;gap:11px}.premium-problem-grid .problem-block{padding:18px;min-height:220px}.premium-problem-grid .stub-icon{width:39px;height:39px;margin-bottom:24px;font-size:1.35rem}.premium-problem-grid h3{font-size:.96rem}.premium-problem-grid p{font-size:.79rem;line-height:1.5}.brand-grid{grid-template-columns:repeat(3,1fr);gap:9px}.brand-block{padding:15px 7px;gap:7px}.brand-logo{width:40px;height:40px}.brand-name{font-size:.72rem}.process-top{display:block;margin-bottom:34px}.process-top .text-action{display:inline-block;margin-top:20px}.mini-steps{grid-template-columns:1fr;gap:28px}.mini-step{padding-left:0;position:relative}.mini-step:not(:last-child):after{left:20px;right:auto;top:54px;bottom:-22px;border-left:1px dashed rgba(255,255,255,.3);border-top:0}.mini-step-num{margin-bottom:14px}.mini-step h3,.mini-step p{padding-left:52px}.mini-step p{font-size:.88rem}.cta-banner{padding:30px 24px;display:block}.cta-banner .btn{margin-top:24px;width:100%;justify-content:center}.foot-top{padding:45px 0 25px;gap:32px}.foot-links{grid-template-columns:1fr 1fr;gap:28px 20px}.foot-col:last-child{grid-column:span 2}.foot-bottom{padding:18px 0;font-size:.68rem}.mobile-callbar{position:fixed;display:flex;align-items:center;gap:8px;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(255,255,255,.96);z-index:60;box-shadow:0 -5px 25px rgba(19,31,69,.12);backdrop-filter:blur(12px)}.mobile-callbar .btn{flex:1;justify-content:center;padding:12px 10px}.mobile-callbar .btn-ghost{background:#fff}.reveal{opacity:1;transform:none}}
+@media(max-width:380px){.premium-problem-grid{grid-template-columns:1fr}.premium-problem-grid .problem-block{min-height:0}.hero-ctas{align-items:stretch;flex-direction:column}.hero-ctas .btn{justify-content:center}.text-action{text-align:center}}
+
+/* Homepage refinement: visible actions and one-row scrolling brand selector */
+.hero-trust{background:rgba(255,255,255,.08);border:1px solid rgba(168,215,255,.18);border-radius:12px;padding:11px 14px;width:max-content;max-width:100%}.hero-trust strong{color:#fff}.hero-trust small{color:#cad7f2}
+.brand-rail-section{padding:54px 0;background:#f4f6fb;overflow:hidden}.brand-rail-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:25px}.brand-rail-head .eyebrow{margin-bottom:11px}.brand-rail-head h2{font-size:clamp(1.8rem,3vw,2.65rem);letter-spacing:-.055em}.brand-rail-controls{display:flex;gap:8px}.rail-arrow{width:42px;height:42px;border-radius:50%;border:1px solid #d9dfef;background:#fff;color:var(--ink);font-size:1.2rem;cursor:pointer;transition:.2s ease}.rail-arrow:hover{background:var(--blue);border-color:var(--blue);color:#fff}.brand-rail{display:flex;gap:12px;overflow-x:auto;scroll-behavior:smooth;padding:4px 2px 10px;scrollbar-width:none}.brand-rail::-webkit-scrollbar{display:none}.brand-rail .brand-block{flex:0 0 138px;padding:18px 10px}.premium-brands{display:none}
+
+/* Brand rail — clear logo-only cards (no name label), same light theme as before.
+   Bigger blocks give each PNG more room to render cleanly instead of being
+   squeezed into a small square. */
+.brand-rail .brand-block{background:#fff;flex-basis:172px;padding:18px 14px}
+.brand-rail .brand-logo{width:100%;height:84px;background:transparent;border-radius:0}
+.brand-rail .brand-logo img{padding:0}
+.brand-rail .brand-name{display:none}
+
+/* Booking wizard's brand step — same clear logo-only treatment */
+#brandGrid .brand-name{display:none}
+#brandGrid .brand-block{padding:14px 10px}
+#brandGrid .brand-logo{width:100%;height:64px;background:transparent;border-radius:0}
+#brandGrid .brand-logo img{padding:0}
+@media(max-width:760px){#brandGrid .brand-block{padding:12px 8px}#brandGrid .brand-logo{height:46px}}
+
+@media(max-width:760px){.hero-ctas{justify-content:flex-start;gap:12px}.hero-ctas .btn{padding:12px 15px;font-size:.87rem}.hero-ctas .text-action{padding:12px 0;white-space:nowrap}.hero-trust{margin-top:23px}.brand-rail-section{padding:40px 0}.brand-rail-head{align-items:center;margin-bottom:18px}.brand-rail-head h2{font-size:1.65rem}.rail-arrow{width:36px;height:36px}.brand-rail-controls{gap:5px}.brand-rail{margin-right:-20px;padding-right:20px}.brand-rail .brand-block{flex-basis:140px;padding:13px 10px}.brand-rail .brand-logo{width:100%;height:58px}.premium-cta .cta-banner{padding:29px 24px}.premium-cta .cta-banner .btn{width:auto;display:inline-flex;margin-top:22px}.mobile-callbar{justify-content:flex-start}.mobile-callbar .btn{flex:0 0 auto;padding:11px 14px}.mobile-callbar .btn-primary{min-width:132px}}
+@media(max-width:380px){.hero-ctas{flex-direction:row;align-items:center}.hero-ctas .text-action{text-align:left;font-size:.8rem}.hero-ctas .btn{font-size:.8rem;padding:11px 12px}}
+
+/* Fast, reassuring booking flow */
+.page-hero{padding:72px 0 28px}.page-hero h1{font-size:clamp(2.3rem,4.5vw,3.85rem);letter-spacing:-.06em;max-width:650px}.page-hero .lead{color:var(--copy);line-height:1.7}.wizard-steps{margin:0 0 18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}.wizard-step-num{border-color:#dbe1f0;font-family:var(--body);font-size:.72rem}.wizard-step.active .wizard-step-num{background:var(--blue);border-color:var(--blue)}.wizard-step.done .wizard-step-num{background:#19a96c;border-color:#19a96c}.wizard-step-label{font-family:var(--body);font-weight:700;color:#64708a}.wizard-step.active .wizard-step-label{color:var(--ink)}.wizard-step-line{background:#e4e8f2}.booking-reassurance{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;margin:0 0 24px;border-radius:12px;background:#edf0ff;color:#32406d;font-size:.78rem}.booking-reassurance span{display:inline-flex;align-items:center;gap:6px}.booking-reassurance b{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:.65rem}.booking-reassurance strong{margin-left:auto;color:#1c2b5d}.wizard-panel{border-color:var(--line);border-radius:18px;padding:36px;box-shadow:0 16px 35px rgba(27,43,91,.06)}.wizard-panel h2{font-size:clamp(1.55rem,3vw,2.1rem);letter-spacing:-.045em}.wizard-panel>p.wizard-sub{color:var(--copy);line-height:1.6}.brand-block,.choice-block,.model-row,.option-card,.slot-chip{border-color:var(--line);border-radius:12px}.brand-block:hover,.choice-block:hover,.model-row:hover,.option-card:hover,.slot-chip:hover{border-color:#9eabff}.choice-block.selected,.model-row.selected,.slot-chip.selected,.option-card.selected{border-color:var(--blue);background:#f0f2ff}.wizard-actions{border-color:var(--line)}.option-card{padding:18px}.option-card.selected .option-radio{border-color:var(--blue)}.option-card.selected .option-radio::after{background:var(--blue)}.option-tag{background:#f1f3f8;color:#526079}.summary-list{border-color:var(--line)}.summary-row{border-color:var(--line)}
+@media(max-width:760px){.page-hero{padding:42px 0 18px}.page-hero h1{font-size:2.35rem}.wizard-steps{padding:12px;margin-bottom:12px}.wizard-step-label{display:none}.wizard-step-line{margin:0 6px}.booking-reassurance{margin-bottom:16px;padding:11px 12px;gap:8px 12px;font-size:.72rem}.booking-reassurance strong{width:100%;margin-left:0;padding-top:3px}.wizard-panel{padding:24px 18px}.wizard-actions{gap:10px}.wizard-actions .btn{padding:12px 15px}.option-card{padding:15px}.choice-grid{gap:9px}.choice-block{padding:14px 11px}}
+
+/* Step indicator: completed steps show a checkmark instead of their
+   number (the number text is still in the DOM for no-JS/no-CSS cases,
+   just visually swapped here). */
+.wizard-step.done .wizard-step-num{font-size:0}
+.wizard-step.done .wizard-step-num::after{content:"✓";font-size:.8rem;font-weight:700;line-height:1}
+
+/* Service selection (multi-select, search + list — gofix-style) */
+.service-search{position:relative;margin-bottom:14px}
+.service-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--copy);pointer-events:none}
+.service-search input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px 12px 40px;font-family:var(--body);font-size:.92rem;color:var(--ink);background:#fff;transition:border-color .2s ease}
+.service-search input:focus{border-color:var(--blue);outline:none}
+.service-list{display:flex;flex-direction:column;gap:8px;max-height:480px;overflow-y:auto;padding-right:2px;margin-bottom:6px}
+.service-row{display:flex;align-items:center;gap:14px;padding:11px 14px;border:1.5px solid var(--line);border-radius:14px;cursor:pointer;transition:border-color .2s ease,background .2s ease}
+.service-row.hidden{display:none}
+.service-row:hover{border-color:#9eabff}
+.service-row.selected{border-color:var(--blue);background:#f0f2ff}
+.service-icon{width:42px;height:42px;flex:0 0 auto;border-radius:11px;background:var(--paper-dim,#f4f6fb);display:grid;place-items:center;color:var(--blue);overflow:hidden}
+.service-icon img{width:100%;height:100%;object-fit:contain;padding:7px;display:block}
+.service-icon svg{width:19px;height:19px}
+.service-name{flex:1;font-weight:600;font-size:.92rem;color:var(--ink)}
+.service-toggle{width:30px;height:30px;flex:0 0 auto;border-radius:50%;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;font-size:1rem;color:var(--blue);transition:background .2s ease,border-color .2s ease,color .2s ease}
+.service-row.selected .service-toggle{background:var(--blue);border-color:var(--blue);color:#fff}
+.service-empty{text-align:center;color:var(--copy);font-size:.88rem;padding:24px 0}
+.service-error{color:#C0392B;font-size:.82rem;margin:-2px 0 12px}
+.service-count{font-weight:700}
+@media(max-width:760px){.service-list{max-height:60vh}.service-row{padding:10px 12px;gap:11px}.service-icon{width:38px;height:38px}}
+
+/* Whole-site premium finish */
+.premium-problem-grid .stub-icon{font-family:var(--body);font-size:.72rem;font-weight:800;letter-spacing:.05em}.premium-problem-grid{grid-template-columns:repeat(4,1fr)}.premium-why{background:#fff}.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.why-card{padding:27px 22px;border:1px solid var(--line);border-radius:16px;background:#fff}.why-icon{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#edf0ff;color:var(--blue);font-size:.72rem;font-weight:800;margin-bottom:23px}.why-card h3{font-size:1.03rem;margin-bottom:8px}.why-card p{font-size:.88rem;line-height:1.62}.page-hero{background:linear-gradient(135deg,#f4f7ff,#fff);max-width:none;padding-left:max(28px,calc((100% - 1144px)/2));padding-right:max(28px,calc((100% - 1144px)/2));padding-top:82px;padding-bottom:52px;border-bottom:1px solid #edf0f6}.grid-3,.grid-4{gap:16px}.stub,.value-card,.people-card,.info-card{border-color:var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(29,45,100,.05)}.cta-banner{box-shadow:0 18px 40px rgba(39,58,130,.1)}.foot-tear{display:none}footer{margin-top:0}.mobile-callbar{display:none!important}
+.communication-widget{position:fixed;right:24px;bottom:24px;z-index:100}.communication-toggle{width:56px;height:56px;border:0;border-radius:18px;background:var(--blue);color:#fff;box-shadow:0 16px 30px rgba(54,75,201,.35);font-weight:800;font-size:1.25rem;cursor:pointer;transition:transform .2s ease,background .2s ease}.communication-toggle:hover{transform:translateY(-3px);background:#4056f5}.communication-panel{position:absolute;right:0;bottom:69px;width:210px;padding:14px;border:1px solid #e0e6fa;border-radius:17px;background:#fff;box-shadow:0 20px 48px rgba(17,30,79,.18)}.communication-panel[hidden]{display:none}.communication-panel>span{display:block;padding:2px 5px 10px;color:#69748b;font-size:.75rem;font-weight:700}.communication-action{display:flex;align-items:center;gap:10px;padding:10px 7px;border-radius:10px;font-size:.87rem}.communication-action:hover{background:#f0f3ff}.communication-action i{width:34px;height:34px;border-radius:9px;background:#edf0ff;color:var(--blue);display:grid;place-items:center;font-size:.67rem;font-style:normal;font-weight:800}.communication-action:last-child i{background:#e5f9ee;color:#16874d}.communication-action b{font-family:var(--body)}
+@media(max-width:760px){.page-hero{padding:47px 20px 48px;line-height:1.35}.page-hero h1{line-height:1.15}.premium-problem-grid{grid-template-columns:repeat(2,1fr)}.premium-problem-grid .problem-block{min-height:205px}.why-grid{grid-template-columns:repeat(2,1fr);gap:10px}.why-card{padding:20px 15px}.why-icon{margin-bottom:17px}.why-card h3{font-size:.92rem}.why-card p{font-size:.78rem}.communication-widget{right:16px;bottom:18px}.communication-toggle{width:54px;height:54px;border-radius:17px}.communication-panel{bottom:66px;width:198px}.communication-action{padding:9px 6px}}
+
+/* --- Fix: dead-feeling gap between "What we repair" and "Why choose" ---
+   Both sections were plain white with 104px top+bottom padding each,
+   giving 208px of undifferentiated blank space with nothing marking the
+   transition. Breaking the background gives the space a clear purpose
+   instead of reading as a mistake, and tightening the padding shortens it. */
+.premium-services{padding-bottom:60px}
+.premium-why{padding-top:60px;background:var(--mist)}
+
+/* ================================================================
+   NAVIGATION SYSTEM
+   ----------------------------------------------------------------
+   Home page (body.is-home — set by an inline script at the top of
+   index.html's <body>, before first paint, so there's no flash):
+   nav starts fully transparent with white text, floating over the
+   dark hero, then solidifies once scrolled past 50px (main.js
+   toggles .scrolled on window.scrollY > 50).
+
+   Every other page (no .is-home class — the default, so any page
+   added later is correct automatically, no markup changes needed):
+   the nav is ALWAYS a solid light glass bar with dark slate text.
+   Their heroes are light, so transparent + white text would be
+   invisible until scrolled — that was the original bug here.
+   ================================================================ */
+
+.site-nav{
+  position:fixed;top:0;left:0;width:100%;z-index:9999;
+  height:84px;display:flex;align-items:center;
+  background:rgba(255,255,255,.90);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(15,23,42,.08);
+  box-shadow:0 8px 25px rgba(15,23,42,.05);
+  transition:all .35s ease;
+}
+
+.nav-inner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;width:100%;padding:0 28px}
+.logo{transition:all .35s ease;white-space:nowrap}
+.logo:hover{transform:scale(1.05)}
+.logo-img img{height:42px}
+
+.nav-links{display:flex;align-items:center;justify-content:center;gap:36px}
+.nav-links-head{display:none}
+.nav-links a.nav-book-mobile{display:none}
+.nav-links a{
+  position:relative;font-family:var(--display);font-weight:600;font-size:15px;
+  color:#475569;transition:all .35s ease;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:-8px;height:2px;width:0;
+  background:#2563EB;border-radius:2px;transition:width .35s ease;
+}
+.nav-links a:hover{color:#0F172A}
+.nav-links a[aria-current=page]{color:#2563EB;font-weight:700}
+.nav-links a[aria-current=page]::after,.nav-links a:hover::after{width:100%}
+
+.nav-book{
+  background:#2563EB;color:#fff;border-radius:9999px;padding:14px 28px;
+  font-family:var(--display);font-weight:700;font-size:14px;
+  box-shadow:0 8px 20px rgba(37,99,235,.18);
+  transition:all .35s ease;
+}
+.nav-book:hover{background:#1D4ED8;transform:translateY(-2px);box-shadow:0 15px 35px rgba(37,99,235,.25)}
+
+.nav-toggle{position:relative;width:40px;height:40px;border:1px solid rgba(15,23,42,.15);border-radius:10px;background:transparent;cursor:pointer;transition:all .35s ease}
+.nav-toggle:hover{border-color:#2563EB;background:rgba(37,99,235,.06)}
+.nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{
+  content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;
+  background:#0F172A;border-radius:2px;transform:translate(-50%,-50%);
+  transition:all .3s ease;
+}
+.nav-toggle span::before{transform:translate(-50%,-50%) translateY(-6px)}
+.nav-toggle span::after{transform:translate(-50%,-50%) translateY(6px)}
+.nav-toggle.open span{background:transparent}
+.nav-toggle.open span::before{transform:translate(-50%,-50%) rotate(45deg)}
+.nav-toggle.open span::after{transform:translate(-50%,-50%) rotate(-45deg)}
+
+/* Dark/light mode switch — sits in nav-cta next to Book repair on every
+   page. Which icon shows is driven by [data-theme] in dark-mode.css;
+   this just defines its (theme-agnostic) shape/hover. */
+.theme-toggle{position:relative;width:40px;height:40px;display:grid;place-items:center;border:1px solid rgba(15,23,42,.15);border-radius:10px;background:transparent;color:#0F172A;cursor:pointer;transition:all .35s ease}
+.theme-toggle:hover{border-color:#2563EB;background:rgba(37,99,235,.06)}
+.theme-toggle svg{width:19px;height:19px;grid-area:1/1}
+.theme-toggle .icon-sun{display:none}
+
+/* --- Home page only: transparent over the dark hero pre-scroll --- */
+body.is-home .site-nav{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid transparent;box-shadow:none}
+body.is-home .site-nav .nav-links a{color:#fff}
+body.is-home .site-nav .nav-links a:hover{color:#fff;opacity:.8}
+body.is-home .site-nav .nav-links a[aria-current=page]{color:#7dd3fc}
+body.is-home .site-nav .nav-links a[aria-current=page]::after,body.is-home .site-nav .nav-links a:hover::after{background:#7dd3fc}
+body.is-home .site-nav .nav-toggle,body.is-home .site-nav .theme-toggle{border-color:rgba(255,255,255,.4);color:#fff}
+body.is-home .site-nav .nav-toggle span,body.is-home .site-nav .nav-toggle span::before,body.is-home .site-nav .nav-toggle span::after{background:#fff}
+
+body.is-home .site-nav.scrolled{
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(15,23,42,.08);
+  box-shadow:0 10px 30px rgba(15,23,42,.06);
+}
+body.is-home .site-nav.scrolled .nav-links a{color:#334155}
+body.is-home .site-nav.scrolled .nav-links a:hover{color:#0F172A;opacity:1}
+body.is-home .site-nav.scrolled .nav-links a[aria-current=page]{color:#2563EB}
+body.is-home .site-nav.scrolled .nav-links a[aria-current=page]::after,body.is-home .site-nav.scrolled .nav-links a:hover::after{background:#2563EB}
+body.is-home .site-nav.scrolled .nav-toggle,body.is-home .site-nav.scrolled .theme-toggle{border-color:rgba(15,23,42,.15);color:#0F172A}
+body.is-home .site-nav.scrolled .nav-toggle:hover,body.is-home .site-nav.scrolled .theme-toggle:hover{border-color:#2563EB;background:rgba(37,99,235,.06)}
+body.is-home .site-nav.scrolled .nav-toggle span,body.is-home .site-nav.scrolled .nav-toggle span::before,body.is-home .site-nav.scrolled .nav-toggle span::after{background:#0F172A}
+
+@media(max-width:980px) and (min-width:761px){
+  .nav-links{gap:22px}
+  .nav-links a{font-size:14px}
+  .nav-book{padding:12px 20px;font-size:13px}
+}
+
+/* Mobile: fullscreen slide-in-from-right menu, identical on every page.
+
+   Root cause of the old broken overlay: .site-nav has backdrop-filter,
+   and .nav-links (position:fixed) was nested INSIDE it. Per spec, an
+   ancestor with a filter/backdrop-filter becomes the containing block
+   for a fixed-position descendant — so "fixed" was actually resolving
+   against the 68px-tall nav bar, not the viewport. That's why the menu
+   never truly filled the screen, page content stayed visible under it,
+   and hit-testing for outside-click landed on the wrong area. Dropping
+   backdrop-filter from .site-nav at this width (it's already a 90%-
+   opaque background, so the visual difference is negligible on a thin
+   bar) lets .nav-links establish its containing block against the real
+   viewport, exactly as position:fixed is supposed to. */
+@media(max-width:760px){
+  .site-nav{height:68px;backdrop-filter:none;-webkit-backdrop-filter:none}
+  /* nav-links becomes position:fixed below (out of normal flow), so the
+     desktop grid (auto 1fr auto) is left sizing a middle track with no
+     in-flow content — on some renders that pushes the toggle button
+     right up against the logo instead of to the far edge. A simple
+     2-item flex with space-between is unambiguous once the middle
+     item is out of flow: logo pins left, the toggle pins right. */
+  .nav-inner{display:flex;justify-content:space-between;padding:0 20px}
+  .nav-book{display:none}
+
+  .nav-links{
+    position:fixed;top:0;left:0;
+    width:100vw;height:100vh;height:100dvh;
+    display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;
+    background:rgba(255,255,255,.98);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    padding:0 24px;
+    overflow-y:auto;
+    z-index:99999;
+    transform:translateX(100%);opacity:0;visibility:hidden;
+    transition:transform .3s ease,opacity .3s ease,visibility 0s linear .3s;
+  }
+  .nav-links.open{
+    transform:translateX(0);opacity:1;visibility:visible;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+
+  .nav-links-head{
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;flex:0 0 auto;
+    border-bottom:1px solid rgba(15,23,42,.08);
+    margin:0 -24px;padding:0 24px;
+  }
+  .nav-links-head .logo-img img{height:32px}
+  .nav-close{
+    width:40px;height:40px;display:grid;place-items:center;
+    border:1px solid rgba(15,23,42,.15);border-radius:10px;
+    background:transparent;color:#0F172A;cursor:pointer;
+    transition:border-color .2s ease,background .2s ease;
+  }
+  .nav-close:hover{border-color:#2563EB;background:rgba(37,99,235,.06)}
+  .nav-close svg{width:18px;height:18px}
+
+  .nav-links a,.nav-links a.nav-book-mobile{
+    display:block;width:100%;
+    padding:20px 0;font-size:22px;font-weight:600;
+    border-bottom:1px solid rgba(15,23,42,.08);
+    color:#0F172A;background:none;border-radius:0;
+  }
+  .nav-links a:hover{color:#2563EB}
+  .nav-links a[aria-current=page]{color:#2563EB}
+  .nav-links a::after{
+    content:"";position:static;display:block;height:2px;width:0;margin-top:8px;
+    background:#2563EB;border-radius:2px;transition:width .3s ease;
+  }
+  .nav-links a:hover::after,.nav-links a[aria-current=page]::after{width:44px}
+  .nav-links a.nav-book-mobile{color:#2563EB;font-weight:700}
+  .nav-links a.nav-book-mobile:last-child{border-bottom:0}
+
+  /* The overlay is always solid white, on every page — so its links must
+     always be dark, even pre-scroll on the home page. */
+  body.is-home .site-nav .nav-links a{color:#0F172A}
+  body.is-home .site-nav .nav-links a[aria-current=page],
+  body.is-home .site-nav .nav-links a:hover{color:#2563EB}
+}
+
+/* Body scroll lock while the mobile menu is open (toggled by main.js) */
+body.nav-open{overflow:hidden}
+
+/* ================================================================
+   FIX: body{padding-top} was creating a blank white strip above the
+   hero (visible through the "transparent" nav) instead of letting
+   the hero's own background reach the top of the page. Correct
+   pattern: no body padding, hero sections push their own content
+   down while their background still fills all the way to y:0.
+   ================================================================ */
+body{padding-top:0!important}
+.premium-hero{padding-top:84px}
+.premium-hero-grid{min-height:calc(650px - 84px)}
+.page-hero{padding-top:104px!important}
+@media(max-width:760px){
+  .premium-hero{padding-top:68px}
+  .page-hero{padding-top:88px!important}
+}
+
+/* Repair-type icons: real PNG photos in place of the stroke-SVG icon,
+   sized to fill whatever .stub-icon box they're placed in (36px in the
+   services grid, 48px in the homepage grid) */
+.stub-icon.repair-image{background:var(--paper-dim, #F8FAFC);padding:6px}
+.stub-icon.repair-image img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* Why-choose cards: numbered text icons replaced with real PNG images */
+.why-icon{width:56px;height:56px;border-radius:14px;background:#edf0ff;padding:12px}
+.why-icon img{width:100%;height:100%;object-fit:contain;display:block}
+@media(max-width:760px){.why-icon{width:46px;height:46px;border-radius:12px;padding:10px}}

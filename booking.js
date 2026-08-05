@@ -6,26 +6,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Data: brands, models, problems ---- */
   const BRANDS = [
-    { key: 'Apple', logo: 'apple', fallback: 'A' },
+    { key: 'Apple', logo: 'iphone', fallback: 'A' },
     { key: 'Samsung', logo: 'samsung', fallback: 'S' },
     { key: 'OnePlus', logo: 'oneplus', fallback: 'O+' },
     { key: 'Xiaomi', logo: 'xiaomi', fallback: 'Mi' },
+    { key: 'Redmi', logo: 'redmi', fallback: 'R' },
+    { key: 'Poco', logo: 'poco', fallback: 'P' },
     { key: 'Realme', logo: 'realme', fallback: 'R' },
     { key: 'Oppo', logo: 'oppo', fallback: 'O' },
     { key: 'Vivo', logo: 'vivo', fallback: 'V' },
-    { key: 'Google Pixel', logo: 'google-pixel', fallback: 'G' },
+    { key: 'Google Pixel', logo: 'gpixel', fallback: 'G' },
     { key: 'Motorola', logo: 'motorola', fallback: 'M' },
     { key: 'Nokia', logo: 'nokia', fallback: 'N' },
     { key: 'Asus', logo: 'asus', fallback: 'A' },
-    { key: 'Honor', logo: 'honor', fallback: 'H' },
+    { key: 'Honor', logo: 'Honor', fallback: 'H' },
     { key: 'iQOO', logo: 'iqoo', fallback: 'iQ' },
+    { key: 'Huawei', logo: 'huawei', fallback: 'HW' },
+    { key: 'Infinix', logo: 'infinix', fallback: 'I' },
+    { key: 'Nothing', logo: 'nothing', fallback: 'N' },
+    { key: 'Lava', logo: 'lava', fallback: 'L' },
+    { key: 'Micromax', logo: 'micromax', fallback: 'M' },
+    { key: 'Tecno', logo: 'tecno', fallback: 'T' },
+    { key: 'LG', logo: 'lg', fallback: 'LG' },
   ];
 
   const MODELS = {
     'Apple': ['iPhone 15 series', 'iPhone 14 series', 'iPhone 13 series', 'iPhone 12 series', 'iPhone SE', 'iPad'],
     'Samsung': ['Galaxy S24 series', 'Galaxy S23 series', 'Galaxy A series', 'Galaxy Note series', 'Galaxy Tab'],
     'OnePlus': ['OnePlus 12 / 11', 'OnePlus 10 series', 'OnePlus Nord series'],
-    'Xiaomi': ['Redmi Note series', 'Redmi series', 'Mi series', 'POCO series'],
+    'Xiaomi': ['Mi series', 'Xiaomi Number series', 'Xiaomi Civi series'],
+    'Redmi': ['Redmi Note series', 'Redmi series', 'Redmi K series'],
+    'Poco': ['POCO X series', 'POCO M series', 'POCO F series'],
     'Realme': ['Realme Number series', 'Realme Narzo series', 'Realme C series'],
     'Oppo': ['Oppo Reno series', 'Oppo A/F series'],
     'Vivo': ['Vivo V series', 'Vivo Y series', 'Vivo T series'],
@@ -35,16 +46,47 @@ document.addEventListener('DOMContentLoaded', () => {
     'Asus': ['ROG Phone series', 'Zenfone series'],
     'Honor': ['Honor Number series', 'Honor Magic series'],
     'iQOO': ['iQOO Number series', 'iQOO Neo series', 'iQOO Z series'],
+    'Huawei': ['P series', 'Mate series', 'Nova series'],
+    'Infinix': ['Note series', 'Hot series', 'Zero series'],
+    'Nothing': ['Phone (1)', 'Phone (2)', 'Phone (2a)'],
+    'Lava': ['Blaze series', 'Yuva series'],
+    'Micromax': ['IN Note series', 'IN series'],
+    'Tecno': ['Camon series', 'Spark series', 'Pova series'],
+    'LG': ['LG G series', 'LG V series', 'LG Wing'],
   };
 
-  const PROBLEMS = [
-    'Broken Display', 'Touch', 'Charging', 'Water Damage',
-    'Lost Data', 'Sound', 'Charging Jack', 'Sensor',
-    'Broken Panel', 'Aux Jack', 'Camera', 'Mic',
+  /* Icon fallback for services with no matching photo yet — kept in the
+     same stroke-SVG style used elsewhere on the site. */
+  const ICONS = {
+    unsure: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>',
+    network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a11 11 0 0 1 14 0"/><path d="M8.5 16a6 6 0 0 1 7 0"/><path d="M12 19.5h.01"/></svg>',
+    jack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v7M12 15v7"/></svg>',
+    power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>',
+  };
+
+  const SERVICES = [
+    { key: 'Not Sure About The Issue', icon: ICONS.unsure },
+    { key: 'Display Replacement', image: 'broken-display.png' },
+    { key: 'Touch Glass Replacement', image: 'broken-display.png' },
+    { key: 'Charging Port', image: 'phone-charging.png' },
+    { key: 'Network Repair', icon: ICONS.network },
+    { key: 'Back Glass Replacement', image: 'phone-back-panel.png' },
+    { key: 'Back Panel Replacement', image: 'phone-back-panel.png' },
+    { key: 'Microphone', image: 'phone-mic.png' },
+    { key: 'Headphone Jack', icon: ICONS.jack },
+    { key: 'Ringer', image: 'speaker-repair.png' },
+    { key: 'Ear Speaker', image: 'speaker-repair.png' },
+    { key: 'Front Camera', image: 'back-camera.png' },
+    { key: 'Rear Camera', image: 'back-camera.png' },
+    { key: 'Device not Switching on', icon: ICONS.power },
+    { key: 'Auto Restart', image: 'phone-software.png' },
+    { key: 'Bluetooth & Wifi', image: 'sensor.png' },
+    { key: 'Battery', image: 'battery-replacement.png' },
+    { key: 'Water Damage', image: 'water-damage.png' },
   ];
 
   const state = {
-    brand: '', model: '', problem: '',
+    brand: '', model: '', services: [],
     name: '', phone: '',
     service: '', serviceLabel: '', address: '',
     slot: ''
@@ -81,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el.className = 'brand-block';
     el.tabIndex = 0;
     el.setAttribute('role', 'button');
-    el.innerHTML = `<span class="brand-logo"><img src="assets/brands/${b.logo}.svg" alt="${b.key}" onerror="this.parentElement.innerHTML='${b.fallback}'"></span><span class="brand-name">${b.key}</span>`;
+    el.innerHTML = `<span class="brand-logo"><img src="assets/brands/${b.logo}.${b.ext || 'png'}" alt="${b.key}" onerror="this.parentElement.innerHTML='${b.fallback}'"></span><span class="brand-name">${b.key}</span>`;
     el.addEventListener('click', () => selectBrand(b.key));
     el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectBrand(b.key); } });
     brandGrid.appendChild(el);
@@ -139,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       row.innerHTML = `<span>${escapeHtml(m)}</span><span class="arrow">→</span>`;
       row.addEventListener('click', () => {
         state.model = m;
-        goTo('problem');
+        goTo(state.services.length ? 'details' : 'problem');
       });
       row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); } });
       modelList.appendChild(row);
@@ -165,51 +207,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const val = modelOtherInput.value.trim();
     if (!val) { modelOtherInput.focus(); return; }
     state.model = val;
-    goTo('problem');
+    goTo(state.services.length ? 'details' : 'problem');
   });
 
-  /* ================= PANEL: problem ================= */
-  const problemGrid = document.getElementById('problemGrid');
-  const fieldProblemOther = document.getElementById('field-problem-other');
-  const problemOtherInput = document.getElementById('b-problem-other');
-  const problemActions = document.getElementById('problemActions');
+  /* ================= PANEL: service selection (multi-select) ================= */
+  const serviceList = document.getElementById('serviceList');
+  const serviceSearch = document.getElementById('serviceSearch');
+  const serviceEmpty = document.getElementById('serviceEmpty');
+  const serviceError = document.getElementById('serviceError');
+  const serviceCount = document.getElementById('serviceCount');
 
-  PROBLEMS.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'choice-block';
-    el.tabIndex = 0;
-    el.setAttribute('role', 'button');
-    el.innerHTML = `<h3>${p}</h3>`;
-    el.addEventListener('click', () => {
-      state.problem = p;
-      goTo('details');
+  SERVICES.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'service-row';
+    row.tabIndex = 0;
+    row.setAttribute('role', 'button');
+    row.dataset.name = s.key.toLowerCase();
+    const iconHtml = s.image
+      ? `<img src="assets/repairs/${s.image}" alt="">`
+      : s.icon;
+    row.innerHTML = `
+      <span class="service-icon">${iconHtml}</span>
+      <span class="service-name">${escapeHtml(s.key)}</span>
+      <span class="service-toggle" aria-hidden="true">+</span>
+    `;
+    const toggle = () => {
+      const i = state.services.indexOf(s.key);
+      if (i === -1) { state.services.push(s.key); row.classList.add('selected'); }
+      else { state.services.splice(i, 1); row.classList.remove('selected'); }
+      row.querySelector('.service-toggle').textContent = row.classList.contains('selected') ? '✓' : '+';
+      updateServiceCount();
+    };
+    row.addEventListener('click', toggle);
+    row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    serviceList.appendChild(row);
+  });
+
+  function updateServiceCount() {
+    const n = state.services.length;
+    if (n > 0) {
+      serviceError.hidden = true;
+      serviceCount.hidden = false;
+      serviceCount.textContent = ` (${n})`;
+    } else {
+      serviceCount.hidden = true;
+    }
+  }
+
+  serviceSearch.addEventListener('input', () => {
+    const q = serviceSearch.value.trim().toLowerCase();
+    let visible = 0;
+    serviceList.querySelectorAll('.service-row').forEach(row => {
+      const match = row.dataset.name.includes(q);
+      row.classList.toggle('hidden', !match);
+      if (match) visible++;
     });
-    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
-    problemGrid.appendChild(el);
+    serviceEmpty.hidden = visible !== 0;
   });
-  const otherProblemEl = document.createElement('div');
-  otherProblemEl.className = 'choice-block other-block';
-  otherProblemEl.tabIndex = 0;
-  otherProblemEl.setAttribute('role', 'button');
-  otherProblemEl.innerHTML = '<h3>Something else</h3>';
-  otherProblemEl.addEventListener('click', () => {
-    fieldProblemOther.hidden = false;
-    problemActions.hidden = false;
-    problemOtherInput.focus();
-  });
-  otherProblemEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); otherProblemEl.click(); } });
-  problemGrid.appendChild(otherProblemEl);
 
   document.getElementById('problemContinueBtn').addEventListener('click', () => {
-    const val = problemOtherInput.value.trim();
-    if (!val) { problemOtherInput.focus(); return; }
-    state.problem = val;
+    if (!state.services.length) { serviceError.hidden = false; return; }
     goTo('details');
   });
 
   /* ================= PANEL: details ================= */
   const detailsForm = document.getElementById('panel-details');
-  detailsForm.addEventListener('submit', (e) => {
+  detailsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nameEl = document.getElementById('b-name');
     const phoneEl = document.getElementById('b-phone');
@@ -232,9 +295,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!valid) return;
 
-    state.name = nameEl.value.trim();
-    state.phone = phoneEl.value.trim();
-    goTo('service');
+   state.name = nameEl.value.trim();
+state.phone = phoneEl.value.trim();
+
+try {
+
+    await window.RajTelecomAPI.createLead({
+
+        name: state.name,
+
+        phone: state.phone.replace(/\D/g, ''),
+
+        brand: state.brand === 'other'
+            ? 'Other'
+            : state.brand,
+
+        model: state.model,
+
+        issue: state.services.join(', ')
+
+    });
+
+}
+catch (error) {
+
+    alert(
+        error.message +
+        "\n\nPlease make sure the backend server is running."
+    );
+
+    return;
+
+}
+
+goTo('service');
   });
 
   /* ================= PANEL: service ================= */
@@ -285,10 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const rows = [
       ['Brand', state.brand === 'other' ? 'Not listed' : state.brand],
       ['Model', state.model],
-      ['Problem', state.problem],
+      ['Services', state.services.join(', ')],
       ['Name', state.name],
       ['Phone', state.phone],
-      ['Service', state.serviceLabel],
+      ['Delivery', state.serviceLabel],
     ];
     if (state.service !== 'visit' && state.address) rows.push(['Address', state.address]);
     rows.push(['Slot', state.slot]);
@@ -298,7 +392,28 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
-  document.getElementById('confirmBtn').addEventListener('click', () => {
+  document.getElementById('confirmBtn').addEventListener('click', async () => {
+    const confirmBtn = document.getElementById('confirmBtn');
+    const originalText = confirmBtn.textContent;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Sending booking...';
+    try {
+      await window.RajTelecomAPI.confirmBooking({
+        name: state.name,
+        phone: state.phone.replace(/\D/g, ''),
+        brand: state.brand === 'other' ? 'Other' : state.brand,
+        model: state.model,
+        issue: state.services.join(', '),
+        serviceLabel: state.serviceLabel,
+        address: state.address,
+        slot: state.slot
+      });
+    } catch (error) {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = originalText;
+      window.alert(error.message + ' Please make sure the local backend is running.');
+      return;
+    }
     const ticketNum = 'RT-' + (1000 + Math.floor(Math.random() * 9000));
     document.getElementById('ticketNum').textContent = '#' + ticketNum;
     document.getElementById('ticketTime').textContent =
@@ -326,13 +441,34 @@ document.addEventListener('DOMContentLoaded', () => {
     slotChips.forEach(c => c.classList.remove('selected'));
     addressField.hidden = true;
     serviceContinueBtn.hidden = true;
-    Object.keys(state).forEach(k => state[k] = '');
+    serviceList.querySelectorAll('.service-row').forEach(row => {
+      row.classList.remove('selected', 'hidden');
+      row.querySelector('.service-toggle').textContent = '+';
+    });
+    serviceSearch.value = '';
+    serviceError.hidden = true;
+    serviceEmpty.hidden = true;
+    Object.keys(state).forEach(k => { state[k] = Array.isArray(state[k]) ? [] : ''; });
+    updateServiceCount();
     goTo('brand');
   });
 
   /* ================= Entry point: read ?brand= from URL ================= */
   const params = new URLSearchParams(window.location.search);
   const brandParam = params.get('brand');
+  const issueParam = params.get('issue');
+  const issueLookup = {
+    screen: 'Display Replacement', battery: 'Battery', charging: 'Charging Port',
+    water: 'Water Damage', camera: 'Rear Camera', sound: 'Ear Speaker',
+    'back-panel': 'Back Panel Replacement', software: 'Auto Restart',
+  };
+  if (issueParam && issueLookup[issueParam]) {
+    const preselected = issueLookup[issueParam];
+    state.services.push(preselected);
+    const row = serviceList.querySelector(`[data-name="${preselected.toLowerCase()}"]`);
+    if (row) { row.classList.add('selected'); row.querySelector('.service-toggle').textContent = '✓'; }
+    updateServiceCount();
+  }
 
   if (brandParam) {
     state.brand = brandParam;
