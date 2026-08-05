@@ -2,7 +2,7 @@ window.RajTelecomAPI = {
 
   createLead: async function (lead) {
 
-    var response = await fetch('http://localhost:5000/api/lead', {
+    var response = await fetch('https://raj-telecom-website.onrender.com', {
 
       method: 'POST',
 
