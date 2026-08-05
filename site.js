@@ -2,7 +2,7 @@ window.RajTelecomAPI = {
 
   createLead: async function (lead) {
 
-    var response = await fetch('https://raj-telecom-website.onrender.com', {
+    var response = await fetch('https://raj-telecom-website.onrender.com/api/lead', {
 
       method: 'POST',
 
@@ -33,7 +33,7 @@ window.RajTelecomAPI = {
 
   confirmBooking: async function (booking) {
 
-    var response = await fetch('https://raj-telecom-website.onrender.com', {
+    var response = await fetch('https://raj-telecom-website.onrender.com/api/confirm', {
 
       method: 'POST',
 
