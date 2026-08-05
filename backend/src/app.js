@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+const webhookRoutes = require("./routes/webhook.routes");
 const leadRoutes = require("./routes/lead.routes");
 const bookingRoutes = require("./routes/booking.routes");
 
@@ -13,7 +13,7 @@ app.use(express.json());
 // Routes
 app.use("/api", leadRoutes);
 app.use("/api", bookingRoutes);
-
+app.use("/", webhookRoutes);
 // Test Route
 app.get("/", (req, res) => {
     res.json({
