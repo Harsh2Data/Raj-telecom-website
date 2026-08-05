@@ -33,7 +33,7 @@ window.RajTelecomAPI = {
 
   confirmBooking: async function (booking) {
 
-    var response = await fetch('http://localhost:5000/api/booking/confirm', {
+    var response = await fetch('https://raj-telecom-website.onrender.com', {
 
       method: 'POST',
 
