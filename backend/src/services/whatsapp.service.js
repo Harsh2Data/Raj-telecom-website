@@ -7,10 +7,34 @@ function ensureConfiguration() {
     PHONE_NUMBER_ID: config.phoneNumberId,
     WHATSAPP_ACCESS_TOKEN: config.accessToken
   };
+  
   const missing = Object.entries(required)
     .filter(([, value]) => !value || !String(value).trim())
     .map(([name]) => name);
   if (missing.length) throw new Error(`WhatsApp configuration missing: ${missing.join(', ')}`);
+}
+function normalizePhone(phone) {
+    let value = String(phone || "").trim();
+
+    // Remove spaces, -, (, ), etc.
+    value = value.replace(/[^\d+]/g, "");
+
+    // +919900886021 → keep it
+    if (value.startsWith("+")) {
+        return value;
+    }
+
+    // 919900886021 → +919900886021
+    if (value.startsWith("91") && value.length === 12) {
+        return `+${value}`;
+    }
+
+    // 9900886021 → +919900886021
+    if (value.length === 10) {
+        return `+91${value}`;
+    }
+
+    throw new Error(`Invalid Indian phone number: ${phone}`);
 }
 
 function messageEndpoint() {
