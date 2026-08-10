@@ -195,26 +195,10 @@
     <!-- PANEL: slot -->
     <div class="wizard-panel" id="panel-slot" data-panel="slot" hidden>
       <h2>Choose a slot</h2>
-      <p class="wizard-sub" id="slotSub">Pick a time that works for you.</p>
+      <p class="wizard-sub" id="slotSub">Pick a time that works for you — we're open Mon–Sat, 10 AM–8 PM.</p>
 
-      <div class="slot-grid">
-        <div class="slot-chip" data-value="Today · 2:00 – 3:00 PM">
-          <div class="slot-day">Today</div>
-          <div class="slot-time">2:00 – 3:00 PM</div>
-        </div>
-        <div class="slot-chip" data-value="Today · 4:00 – 5:00 PM">
-          <div class="slot-day">Today</div>
-          <div class="slot-time">4:00 – 5:00 PM</div>
-        </div>
-        <div class="slot-chip" data-value="Tomorrow · 10:00 – 11:00 AM">
-          <div class="slot-day">Tomorrow</div>
-          <div class="slot-time">10:00 – 11:00 AM</div>
-        </div>
-        <div class="slot-chip" data-value="Tomorrow · 1:00 – 2:00 PM">
-          <div class="slot-day">Tomorrow</div>
-          <div class="slot-time">1:00 – 2:00 PM</div>
-        </div>
-      </div>
+      <div class="slot-days" id="slotDays"></div>
+      <p id="slotEmpty" class="service-empty" hidden>We're closed right now — please check back during working hours (Mon–Sat, 10 AM–8 PM).</p>
 
       <div class="wizard-actions">
         <button type="button" class="btn btn-ghost" data-back-to="service">Back</button>
@@ -299,8 +283,9 @@
         </div>
         <div class="foot-col">
           <h4>Contact</h4>
-          <a href="tel:+910000000000">+91 00000 00000</a>
+          <a href="tel:+919004911605">+91 90049 11605</a>
           <a href="mailto:hello@rajtelecom.example">hello@rajtelecom.example</a>
+          <a href="https://www.instagram.com/raj_telecom_nsp?igsh=MTR3Y24zZHY1ZnBrag%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
         </div>
         <div class="foot-col">
           <h4>Visit</h4>
@@ -318,7 +303,7 @@
 </footer>
 
 <div class="mobile-callbar">
-  <a href="tel:+910000000000" class="btn btn-ghost btn-sm">Call us</a>
+  <a href="tel:+919004911605" class="btn btn-ghost btn-sm">Call us</a>
   <a href="booking.html" class="btn btn-primary btn-sm">Book a repair</a>
 </div>
 

@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const GROUP = { brand: 1, model: 1, problem: 2, details: 3, service: 4, slot: 4, confirm: 5, success: 5 };
 
   function goTo(name) {
+    if (name === 'slot') renderSlotPanel();
     Object.values(panels).forEach(p => p.hidden = true);
     panels[name].hidden = false;
     const g = GROUP[name];
@@ -431,16 +432,96 @@ goTo('service');
   });
 
   /* ================= PANEL: slot ================= */
-  const slotChips = document.querySelectorAll('#panel-slot .slot-chip');
-  slotChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      slotChips.forEach(c => c.classList.remove('selected'));
-      chip.classList.add('selected');
-      state.slot = chip.dataset.value;
-      buildSummary('summaryList');
-      goTo('confirm');
-    });
-  });
+  /* Real slots, computed from the current time — not hardcoded strings.
+     Shop hours: Mon–Sat, 10 AM–8 PM (closed Sunday). Slots run every 2
+     hours starting at 10 AM, each 1 hour long, last one ending by 7 PM
+     (leaving an hour of buffer before close). "Today" only offers slots
+     starting at least 90 minutes from now, so nobody can book a slot
+     that's effectively already happening. Walks forward day by day,
+     skipping Sundays, until it has 3 days' worth of open slots to show. */
+  const slotDays = document.getElementById('slotDays');
+  const slotEmpty = document.getElementById('slotEmpty');
+
+  const SLOT_WORK_START_HOUR = 10;
+  const SLOT_WORK_END_HOUR = 20;
+  const SLOT_STEP_HOURS = 2;
+  const SLOT_LENGTH_HOURS = 1;
+  const SLOT_LEAD_MINUTES = 90;
+  const SLOT_DAYS_TO_SHOW = 3;
+  const SLOT_MAX_LOOKAHEAD = 8;
+
+  function slotFormatHour(hour) {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const h12 = ((hour + 11) % 12) + 1;
+    return `${h12}:00 ${period}`;
+  }
+
+  function slotDayLabel(date, offsetDays) {
+    if (offsetDays === 0) return 'Today';
+    if (offsetDays === 1) return 'Tomorrow';
+    return date.toLocaleDateString('en-IN', { weekday: 'short' });
+  }
+
+  function slotsForDay(date, offsetDays, now) {
+    const slots = [];
+    for (let hour = SLOT_WORK_START_HOUR; hour + SLOT_LENGTH_HOURS <= SLOT_WORK_END_HOUR; hour += SLOT_STEP_HOURS) {
+      if (offsetDays === 0) {
+        const start = new Date(date);
+        start.setHours(hour, 0, 0, 0);
+        const earliest = new Date(now.getTime() + SLOT_LEAD_MINUTES * 60000);
+        if (start < earliest) continue;
+      }
+      slots.push({
+        label: `${slotFormatHour(hour)} – ${slotFormatHour(hour + SLOT_LENGTH_HOURS)}`
+      });
+    }
+    return slots;
+  }
+
+  function renderSlotPanel() {
+    const now = new Date();
+    slotDays.innerHTML = '';
+    let daysShown = 0;
+
+    for (let offset = 0; offset < SLOT_MAX_LOOKAHEAD && daysShown < SLOT_DAYS_TO_SHOW; offset++) {
+      const date = new Date(now);
+      date.setDate(date.getDate() + offset);
+      if (date.getDay() === 0) continue; // closed Sunday
+
+      const slots = slotsForDay(date, offset, now);
+      if (!slots.length) continue;
+
+      const dayName = slotDayLabel(date, offset);
+      const dayDate = date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+
+      const group = document.createElement('div');
+      group.className = 'slot-day-group';
+      group.innerHTML = `
+        <div class="slot-day-heading"><span class="slot-day-name">${dayName}</span><span class="slot-day-date">${escapeHtml(dayDate)}</span></div>
+        <div class="slot-row"></div>
+      `;
+      const row = group.querySelector('.slot-row');
+      slots.forEach(s => {
+        const value = `${dayName}, ${dayDate} · ${s.label}`;
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'slot-chip';
+        chip.textContent = s.label;
+        chip.addEventListener('click', () => {
+          slotDays.querySelectorAll('.slot-chip.selected').forEach(c => c.classList.remove('selected'));
+          chip.classList.add('selected');
+          state.slot = value;
+          buildSummary('summaryList');
+          goTo('confirm');
+        });
+        row.appendChild(chip);
+      });
+      slotDays.appendChild(group);
+      daysShown++;
+    }
+
+    slotEmpty.hidden = daysShown > 0;
+  }
 
   /* ================= PANEL: confirm / success ================= */
   function buildSummary(targetId) {
@@ -507,7 +588,7 @@ goTo('service');
     detailsForm.reset();
     document.getElementById('b-address').value = '';
     optionCards.forEach(c => c.classList.remove('selected'));
-    slotChips.forEach(c => c.classList.remove('selected'));
+    slotDays.innerHTML = '';
     addressField.hidden = true;
     serviceContinueBtn.hidden = true;
     serviceList.querySelectorAll('.service-row').forEach(row => {

@@ -164,7 +164,8 @@
 [data-theme="dark"] .option-radio{background:var(--d-surface-2);border-color:var(--d-border)}
 [data-theme="dark"] .option-tag{background:var(--d-surface);color:var(--d-muted)}
 [data-theme="dark"] .option-card.selected .option-tag{background:var(--d-surface-2);color:var(--d-text)}
-[data-theme="dark"] .slot-day,[data-theme="dark"] .model-row .arrow{color:var(--d-muted)}
+[data-theme="dark"] .slot-day-date,[data-theme="dark"] .model-row .arrow{color:var(--d-muted)}
+[data-theme="dark"] .slot-day-name{color:var(--d-text)}
 [data-theme="dark"] .model-card{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
 [data-theme="dark"] .model-card-name{color:var(--d-text)}
 [data-theme="dark"] .model-card:hover{border-color:#60A5FA}
