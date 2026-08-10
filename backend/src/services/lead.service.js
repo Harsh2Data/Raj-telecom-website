@@ -7,7 +7,10 @@ const {
     buildOwnerLeadMessage
 } = require("../utils/messageBuilder");
 
-const { getOrCreateConversation } = require("./conversation.service");
+const {
+    getOrCreateConversation
+} = require("./conversation.service");
+
 
 const createLead = async (lead) => {
 
@@ -22,8 +25,24 @@ When the customer replies, use this code to reply from your WhatsApp.`;
     console.log("Customer phone:", lead.phone);
     console.log("Device:", `${lead.brand} ${lead.model}`);
 
+
     // ================================
-    // SEND LEAD TO MULTIPLE OWNERS
+    // OWNER PHONES DIAGNOSTIC
+    // ================================
+
+    console.log(
+        "OWNER_PHONES configured:",
+        Boolean(process.env.OWNER_PHONES)
+    );
+
+    console.log(
+        "OWNER_PHONES length:",
+        process.env.OWNER_PHONES?.length || 0
+    );
+
+
+    // ================================
+    // GET MULTIPLE OWNER NUMBERS
     // ================================
 
     const ownerPhones = (process.env.OWNER_PHONES || "")
@@ -31,48 +50,38 @@ When the customer replies, use this code to reply from your WhatsApp.`;
         .map(phone => phone.trim())
         .filter(Boolean);
 
-   // ================================
-// SEND LEAD TO MULTIPLE OWNERS
-// ================================
+    console.log(
+        "Owner phones count:",
+        ownerPhones.length
+    );
 
-console.log(
-    "OWNER_PHONES configured:",
-    Boolean(process.env.OWNER_PHONES)
-);
 
-console.log(
-    "OWNER_PHONES length:",
-    process.env.OWNER_PHONES?.length || 0
-);
+    // ================================
+    // SEND LEAD TO ALL OWNERS
+    // ================================
 
-const ownerPhones = (process.env.OWNER_PHONES || "")
-    .split(",")
-    .map(phone => phone.trim())
-    .filter(Boolean);
+    for (const ownerPhone of ownerPhones) {
 
-console.log("Owner phones count:", ownerPhones.length);
+        try {
 
-for (const ownerPhone of ownerPhones) {
+            await sendTextMessage(
+                ownerPhone,
+                message
+            );
 
-    try {
+            console.log(
+                `✅ Owner notification sent to ${ownerPhone}`
+            );
 
-        await sendTextMessage(
-            ownerPhone,
-            message
-        );
+        } catch (error) {
 
-        console.log(
-            `✅ Owner notification sent to ${ownerPhone}`
-        );
-
-    } catch (error) {
-
-        console.error(
-            `❌ Failed to notify owner ${ownerPhone}:`,
-            error.message
-        );
+            console.error(
+                `❌ Failed to notify owner ${ownerPhone}:`,
+                error.message
+            );
+        }
     }
-}
+
 
     // ================================
     // CUSTOMER PHONE
@@ -89,6 +98,7 @@ for (const ownerPhone of ownerPhones) {
         "Sending template to:",
         normalizedCustomerPhone
     );
+
 
     // ================================
     // SEND CUSTOMER CONFIRMATION
@@ -133,10 +143,12 @@ for (const ownerPhone of ownerPhones) {
         );
     }
 
+
     return {
         success: true
     };
 };
+
 
 module.exports = {
     createLead
