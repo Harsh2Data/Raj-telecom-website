@@ -59,12 +59,14 @@ router.get('/webhook', (req, res) => {
 });
 
 router.post('/webhook', async (req, res) => {
-  console.log('📩 POST /webhook received');
+    console.log('🔥 WEBHOOK POST RECEIVED');
+    console.log('Headers:', req.headers);
+    console.log('Body:', JSON.stringify(req.body, null, 2));
 
-  if (!validSignature(req)) {
-    console.log('❌ Invalid webhook signature');
-    return res.sendStatus(401);
-  }
+    if (!validSignature(req)) {
+        console.log('❌ Invalid webhook signature');
+        return res.sendStatus(401);
+    }
 
   console.log('✅ Webhook signature valid');
 
