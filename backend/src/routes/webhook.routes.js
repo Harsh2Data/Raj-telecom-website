@@ -63,10 +63,15 @@ router.post('/webhook', async (req, res) => {
     console.log('Headers:', req.headers);
     console.log('Body:', JSON.stringify(req.body, null, 2));
 
-    if (!validSignature(req)) {
-        console.log('❌ Invalid webhook signature');
-        return res.sendStatus(401);
-    }
+console.log('RAW BODY EXISTS:', !!req.rawBody);
+console.log('RAW BODY LENGTH:', req.rawBody?.length);
+console.log('SIGNATURE EXISTS:', !!req.get('x-hub-signature-256'));
+console.log('APP SECRET EXISTS:', !!process.env.META_APP_SECRET);
+
+if (!validSignature(req)) {
+    console.log('❌ Invalid webhook signature');
+    return res.sendStatus(401);
+}
 
   console.log('✅ Webhook signature valid');
 
