@@ -31,29 +31,48 @@ When the customer replies, use this code to reply from your WhatsApp.`;
         .map(phone => phone.trim())
         .filter(Boolean);
 
-    console.log("Owner phones:", ownerPhones);
+   // ================================
+// SEND LEAD TO MULTIPLE OWNERS
+// ================================
 
-    for (const ownerPhone of ownerPhones) {
+console.log(
+    "OWNER_PHONES configured:",
+    Boolean(process.env.OWNER_PHONES)
+);
 
-        try {
+console.log(
+    "OWNER_PHONES length:",
+    process.env.OWNER_PHONES?.length || 0
+);
 
-            await sendTextMessage(
-                ownerPhone,
-                message
-            );
+const ownerPhones = (process.env.OWNER_PHONES || "")
+    .split(",")
+    .map(phone => phone.trim())
+    .filter(Boolean);
 
-            console.log(
-                `✅ Owner notification sent to ${ownerPhone}`
-            );
+console.log("Owner phones count:", ownerPhones.length);
 
-        } catch (error) {
+for (const ownerPhone of ownerPhones) {
 
-            console.error(
-                `❌ Failed to notify owner ${ownerPhone}:`,
-                error.message
-            );
-        }
+    try {
+
+        await sendTextMessage(
+            ownerPhone,
+            message
+        );
+
+        console.log(
+            `✅ Owner notification sent to ${ownerPhone}`
+        );
+
+    } catch (error) {
+
+        console.error(
+            `❌ Failed to notify owner ${ownerPhone}:`,
+            error.message
+        );
     }
+}
 
     // ================================
     // CUSTOMER PHONE
