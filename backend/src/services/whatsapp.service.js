@@ -88,18 +88,22 @@ const sendTemplateMessage = async (
 
     try {
 
+        const formattedPhone = normalizePhone(to);
+
         console.log("📤 TEMPLATE REQUEST");
         console.log({
-            to,
+            to: formattedPhone,
             templateName,
             parameters
         });
 
         const response = await axios.post(
-            `https://graph.facebook.com/${config.apiVersion}/${config.phoneNumberId}/messages`,
+            messageEndpoint(),
             {
                 messaging_product: "whatsapp",
-                to: to,
+
+                to: formattedPhone,
+
                 type: "template",
 
                 template: {
@@ -112,6 +116,7 @@ const sendTemplateMessage = async (
                     components: [
                         {
                             type: "body",
+
                             parameters: parameters.map(value => ({
                                 type: "text",
                                 text: String(value)
