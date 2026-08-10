@@ -27,10 +27,19 @@ Booking Confirmed
 `;
 
     // Send owner notification
-    await sendTextMessage(
-        process.env.OWNER_PHONE,
-        ownerMessage
-    );
+const ownerPhones = (process.env.OWNER_PHONES || "")
+    .split(",")
+    .map(phone => phone.trim())
+    .filter(Boolean);
+
+for (const ownerPhone of ownerPhones) {
+    try {
+        await sendTextMessage(ownerPhone, ownerMessage);
+        console.log(`✅ Owner notification sent to ${ownerPhone}`);
+    } catch (error) {
+        console.error(`❌ Failed to notify owner ${ownerPhone}`);
+    }
+}
 
     // Prepare customer details
     const deviceName = `${booking.brand} ${booking.model}`.trim();
