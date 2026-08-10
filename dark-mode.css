@@ -165,6 +165,13 @@
 [data-theme="dark"] .option-tag{background:var(--d-surface);color:var(--d-muted)}
 [data-theme="dark"] .option-card.selected .option-tag{background:var(--d-surface-2);color:var(--d-text)}
 [data-theme="dark"] .slot-day,[data-theme="dark"] .model-row .arrow{color:var(--d-muted)}
+[data-theme="dark"] .model-card{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
+[data-theme="dark"] .model-card-name{color:var(--d-text)}
+[data-theme="dark"] .model-card:hover{border-color:#60A5FA}
+[data-theme="dark"] .model-card.selected{border-color:#2563EB;background:rgba(37,99,235,.2)}
+[data-theme="dark"] .model-card.more-models{background:var(--d-surface)}
+[data-theme="dark"] .model-card.more-models .model-card-img{background:var(--d-surface-2);color:var(--d-muted)}
+[data-theme="dark"] .model-card.more-models .model-card-name{color:var(--d-muted)}
 [data-theme="dark"] .picked-chip{background:var(--d-surface-2);border-color:var(--d-border);color:var(--d-text)}
 [data-theme="dark"] .picked-chip button{background:var(--d-surface);border-color:var(--d-border);color:var(--d-muted)}
 [data-theme="dark"] .summary-list{border-color:var(--d-border)}

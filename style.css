@@ -759,6 +759,7 @@ p { color: var(--ink-soft); }
   display: flex; justify-content: space-between; align-items: center; margin-top: 30px;
   padding-top: 24px; border-top: 1px solid var(--hairline);
 }
+.wizard-actions[hidden] { display: none; }
 
 .option-card {
   border: 1.5px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px;
@@ -843,6 +844,34 @@ p { color: var(--ink-soft); }
 .model-row:hover { border-color: var(--ink); }
 .model-row.selected { border-color: var(--amber); background: var(--amber-dim); }
 .model-row .arrow { color: var(--graphite); font-family: var(--font-mono); }
+
+.model-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
+  max-height: 560px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px;
+}
+@media (max-width: 760px) { .model-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+.model-card {
+  border: 1.5px solid var(--hairline); border-radius: var(--radius); padding: 12px;
+  cursor: pointer; text-align: center; background: var(--white);
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.model-card:hover { border-color: var(--amber); transform: translateY(-3px); box-shadow: 0 14px 28px -16px rgba(37,99,235,0.28); }
+.model-card:focus-visible { border-color: var(--amber); }
+.model-card.selected { border-color: var(--amber); border-width: 2px; padding: 11.5px; background: var(--amber-dim); box-shadow: 0 0 0 3px var(--amber-dim); }
+.model-card.hidden { display: none; }
+.model-card-img {
+  aspect-ratio: 3 / 4; background: var(--paper-dim); border-radius: calc(var(--radius) - 4px);
+  overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
+}
+.model-card-img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.model-card-name {
+  font-size: 0.78rem; font-weight: 600; color: var(--ink); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.model-card.more-models { background: var(--paper-dim); border-style: dashed; }
+.model-card.more-models .model-card-img { background: var(--white); color: var(--graphite); font-size: 1.4rem; font-weight: 700; }
+.model-card.more-models .model-card-name { color: var(--graphite); }
 
 .choice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 @media (max-width: 620px) { .choice-grid { grid-template-columns: repeat(2, 1fr); } }

@@ -94,7 +94,12 @@
       <div class="picked-chip" id="brandChip"></div>
       <h2>Select your model</h2>
       <p class="wizard-sub" id="modelSub">Choose the closest match — exact variant doesn't matter yet.</p>
+      <div class="field" id="modelSearchField" style="margin-bottom:16px;">
+        <input type="text" id="modelSearch" placeholder="Search for your model…">
+      </div>
+      <div class="model-grid" id="modelGrid"></div>
       <div class="model-list" id="modelList"></div>
+      <p id="modelEmpty" class="service-empty" hidden>No matching models — try a different search.</p>
       <div class="field inline-reveal" id="field-model-other" hidden>
         <label for="b-model-other">Your phone model</label>
         <input type="text" id="b-model-other" placeholder="e.g. Galaxy F14, Redmi 12, iPhone 12 mini">
@@ -319,6 +324,7 @@
 
 <script src="main.js"></script>
 <script src="site.js"></script>
+<script src="assets/js/model-catalog.js"></script>
 <script src="booking.js"></script>
 </body>
 </html>

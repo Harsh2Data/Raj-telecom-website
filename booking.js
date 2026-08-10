@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { key: 'LG', logo: 'lg', fallback: 'LG' },
   ];
 
+  const MODEL_CATALOG = window.MODEL_CATALOG || {};
+
   const MODELS = {
     'Apple': ['iPhone 15 series', 'iPhone 14 series', 'iPhone 13 series', 'iPhone 12 series', 'iPhone SE', 'iPad'],
     'Samsung': ['Galaxy S24 series', 'Galaxy S23 series', 'Galaxy A series', 'Galaxy Note series', 'Galaxy Tab'],
@@ -151,13 +153,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ================= PANEL: model ================= */
   const modelList = document.getElementById('modelList');
+  const modelGrid = document.getElementById('modelGrid');
+  const modelSearchField = document.getElementById('modelSearchField');
+  const modelSearch = document.getElementById('modelSearch');
+  const modelEmpty = document.getElementById('modelEmpty');
   const fieldModelOther = document.getElementById('field-model-other');
   const modelOtherInput = document.getElementById('b-model-other');
   const modelActions = document.getElementById('modelActions');
   const modelSub = document.getElementById('modelSub');
 
+  function selectModel(name) {
+    state.model = name;
+    goTo(state.services.length ? 'details' : 'problem');
+  }
+
+  function openOtherModelField() {
+    fieldModelOther.hidden = false;
+    fieldModelOther.querySelector('label').textContent = 'Your phone model';
+    modelOtherInput.placeholder = 'e.g. Galaxy F14, Redmi 12';
+    modelActions.hidden = false;
+    modelOtherInput.focus();
+  }
+
+  function renderModelList(list) {
+    modelList.hidden = false;
+    list.forEach(m => {
+      const row = document.createElement('div');
+      row.className = 'model-row';
+      row.tabIndex = 0;
+      row.setAttribute('role', 'button');
+      row.innerHTML = `<span>${escapeHtml(m)}</span><span class="arrow">→</span>`;
+      row.addEventListener('click', () => selectModel(m));
+      row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); } });
+      modelList.appendChild(row);
+    });
+
+    const otherRow = document.createElement('div');
+    otherRow.className = 'model-row';
+    otherRow.tabIndex = 0;
+    otherRow.setAttribute('role', 'button');
+    otherRow.innerHTML = `<span>Other / not listed</span><span class="arrow">→</span>`;
+    otherRow.addEventListener('click', openOtherModelField);
+    otherRow.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); otherRow.click(); } });
+    modelList.appendChild(otherRow);
+  }
+
+  function renderModelGrid(catalog) {
+    modelGrid.hidden = false;
+    modelSearchField.hidden = false;
+
+    catalog.forEach(m => {
+      const card = document.createElement('div');
+      card.className = 'model-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.dataset.name = m.name.toLowerCase();
+      card.innerHTML = `
+        <span class="model-card-img"><img src="${m.image}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></span>
+        <span class="model-card-name">${escapeHtml(m.name)}</span>
+      `;
+      card.addEventListener('click', () => selectModel(m.name));
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+      modelGrid.appendChild(card);
+    });
+
+    const otherCard = document.createElement('div');
+    otherCard.className = 'model-card more-models';
+    otherCard.tabIndex = 0;
+    otherCard.setAttribute('role', 'button');
+    otherCard.innerHTML = `<span class="model-card-img">+</span><span class="model-card-name">Other / not listed</span>`;
+    otherCard.addEventListener('click', openOtherModelField);
+    otherCard.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); otherCard.click(); } });
+    modelGrid.appendChild(otherCard);
+  }
+
+  modelSearch.addEventListener('input', () => {
+    const q = modelSearch.value.trim().toLowerCase();
+    let visible = 0;
+    modelGrid.querySelectorAll('.model-card:not(.more-models)').forEach(card => {
+      const match = card.dataset.name.includes(q);
+      card.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+    modelEmpty.hidden = visible !== 0;
+  });
+
   function renderModelPanel() {
     modelList.innerHTML = '';
+    modelList.hidden = true;
+    modelGrid.innerHTML = '';
+    modelGrid.hidden = true;
+    modelSearchField.hidden = true;
+    modelSearch.value = '';
+    modelEmpty.hidden = true;
     fieldModelOther.hidden = true;
     modelActions.hidden = true;
     modelOtherInput.value = '';
@@ -172,42 +260,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     modelSub.textContent = "Choose the closest match — exact variant doesn't matter yet.";
-    const list = MODELS[state.brand] || [];
-    list.forEach(m => {
-      const row = document.createElement('div');
-      row.className = 'model-row';
-      row.tabIndex = 0;
-      row.setAttribute('role', 'button');
-      row.innerHTML = `<span>${escapeHtml(m)}</span><span class="arrow">→</span>`;
-      row.addEventListener('click', () => {
-        state.model = m;
-        goTo(state.services.length ? 'details' : 'problem');
-      });
-      row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); } });
-      modelList.appendChild(row);
-    });
 
-    const otherRow = document.createElement('div');
-    otherRow.className = 'model-row';
-    otherRow.tabIndex = 0;
-    otherRow.setAttribute('role', 'button');
-    otherRow.innerHTML = `<span>Other / not listed</span><span class="arrow">→</span>`;
-    otherRow.addEventListener('click', () => {
-      fieldModelOther.hidden = false;
-      fieldModelOther.querySelector('label').textContent = 'Your phone model';
-      modelOtherInput.placeholder = 'e.g. Galaxy F14, Redmi 12';
-      modelActions.hidden = false;
-      modelOtherInput.focus();
-    });
-    otherRow.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); otherRow.click(); } });
-    modelList.appendChild(otherRow);
+    const catalog = MODEL_CATALOG[state.brand];
+    if (catalog && catalog.length) {
+      renderModelGrid(catalog);
+    } else {
+      renderModelList(MODELS[state.brand] || []);
+    }
   }
 
   document.getElementById('modelContinueBtn').addEventListener('click', () => {
     const val = modelOtherInput.value.trim();
     if (!val) { modelOtherInput.focus(); return; }
-    state.model = val;
-    goTo(state.services.length ? 'details' : 'problem');
+    selectModel(val);
   });
 
   /* ================= PANEL: service selection (multi-select) ================= */
