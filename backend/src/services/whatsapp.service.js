@@ -60,13 +60,18 @@ const sendTemplateMessage = async (
 
     try {
 
+        console.log("📤 TEMPLATE REQUEST");
+        console.log({
+            to,
+            templateName,
+            parameters
+        });
+
         const response = await axios.post(
             `https://graph.facebook.com/${config.apiVersion}/${config.phoneNumberId}/messages`,
             {
                 messaging_product: "whatsapp",
-
                 to: to,
-
                 type: "template",
 
                 template: {
@@ -79,7 +84,6 @@ const sendTemplateMessage = async (
                     components: [
                         {
                             type: "body",
-
                             parameters: parameters.map(value => ({
                                 type: "text",
                                 text: String(value)
@@ -97,6 +101,7 @@ const sendTemplateMessage = async (
         );
 
         console.log("✅ Template Message Sent");
+        console.log("📥 META RESPONSE:");
         console.log(response.data);
 
         return response.data;
