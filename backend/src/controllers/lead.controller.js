@@ -13,7 +13,7 @@ exports.createLead = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Lead creation failed:", error.response?.data ? JSON.stringify(error.response.data) : error.stack);
 
         res.status(500).json({
             success: false,

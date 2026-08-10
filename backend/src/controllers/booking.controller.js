@@ -20,7 +20,7 @@ const confirmBooking = async (req, res) => {
 
     catch (error) {
 
-        console.error(error);
+        console.error("Booking confirmation failed:", error.response?.data ? JSON.stringify(error.response.data) : error.stack);
 
         return res.status(500).json({
 
