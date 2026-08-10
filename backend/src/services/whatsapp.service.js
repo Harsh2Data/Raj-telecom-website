@@ -68,12 +68,16 @@ async function sendPayload(payload) {
 }
 
 async function sendTextMessage(to, message) {
-  return sendPayload({
-    messaging_product: 'whatsapp',
-    to: String(to).replace(/\D/g, ''),
-    type: 'text',
-    text: { body: message }
-  });
+    const formattedPhone = normalizePhone(to);
+
+    console.log("📱 Sending text to:", formattedPhone);
+
+    return sendPayload({
+        messaging_product: 'whatsapp',
+        to: formattedPhone,
+        type: 'text',
+        text: { body: message }
+    });
 }
 
 const sendTemplateMessage = async (
