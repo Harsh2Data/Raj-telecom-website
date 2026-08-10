@@ -60,7 +60,7 @@ const sendTemplateMessage = async (
                     name: templateName,
 
                     language: {
-                        code: "en_us"
+                        code: "en_US"
                     },
 
                     components: [
