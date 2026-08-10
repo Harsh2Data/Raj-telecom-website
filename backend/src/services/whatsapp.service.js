@@ -110,3 +110,4 @@ const sendTemplateMessage = async (
         throw error;
     }
 };
+module.exports = { sendTextMessage, sendTemplateMessage };
