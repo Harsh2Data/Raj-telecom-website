@@ -44,21 +44,21 @@ for (const ownerPhone of ownerPhones) {
     // Prepare customer details
     const deviceName = `${booking.brand} ${booking.model}`.trim();
 
-    const customerPhone = booking.phone.startsWith("91")
-        ? booking.phone
-        : `91${booking.phone}`;
+const customerPhone = booking.phone;
+
+console.log("Customer phone from booking:", customerPhone);
 
     console.log("Sending booking template to:", customerPhone);
 
     // Send customer confirmation
-    await sendTemplateMessage(
-        customerPhone,
-        "booking_confirmed",
-        [
-            booking.name,
-            deviceName
-        ]
-    );
+await sendTemplateMessage(
+    customerPhone,
+    "booking_confirmed",
+    [
+        booking.name,
+        deviceName
+    ]
+);
 
     return {
         success: true
