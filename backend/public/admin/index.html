@@ -7,48 +7,122 @@
 <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-<div class="app-shell">
-  <aside class="sidebar">
-    <div class="brand">Raj Telecom</div>
-    <nav>
-      <button type="button" data-view="dashboard" class="active">Dashboard</button>
-      <button type="button" data-view="conversations">Conversations</button>
+<div class="app-shell" id="appShell">
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <span class="brand-mark">RT</span>
+        <span class="brand-name">Raj Telecom</span>
+      </div>
+      <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="conn-status" id="connStatus"><span class="dot"></span><span class="conn-label">Connecting…</span></div>
+
+    <nav class="side-nav">
+      <button type="button" class="nav-item active" data-view="dashboard">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </button>
+      <button type="button" class="nav-item" data-view="conversations">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversations
+        <span class="nav-badge" id="navUnreadBadge" hidden>0</span>
+      </button>
     </nav>
-    <button type="button" class="logout-btn" id="logoutBtn">Logout</button>
+
+    <div class="sidebar-bottom">
+      <div class="admin-card">
+        <span class="admin-avatar" id="adminAvatar">A</span>
+        <div class="admin-info">
+          <div class="admin-name" id="adminName">—</div>
+          <div class="admin-email" id="adminEmail">—</div>
+        </div>
+      </div>
+      <button type="button" class="logout-btn" id="logoutBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
   </aside>
 
-  <main class="main">
-    <!-- DASHBOARD -->
-    <section class="view active" id="view-dashboard">
-      <h2>Dashboard</h2>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="num" id="statUnread">–</div><div class="label">New / unread</div></div>
-        <div class="stat-card"><div class="num" id="statActive">–</div><div class="label">Active conversations</div></div>
-        <div class="stat-card"><div class="num" id="statClosed">–</div><div class="label">Closed</div></div>
-        <div class="stat-card"><div class="num" id="statTotal">–</div><div class="label">Total conversations</div></div>
-        <div class="stat-card"><div class="num" id="statToday">–</div><div class="label">Today</div></div>
-      </div>
-    </section>
+  <div class="main-col">
+    <header class="topbar">
+      <button type="button" class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <button type="button" class="mute-btn" id="muteBtn" title="Mute notifications"></button>
+    </header>
 
-    <!-- CONVERSATIONS -->
-    <section class="view conv-view" id="view-conversations">
-      <div class="conv-list-pane">
-        <div class="conv-list-head">
-          <h2>Customer Conversations</h2>
-          <input type="search" class="conv-search" id="convSearch" placeholder="Search name, phone, model…">
-          <div class="conv-filters">
-            <button type="button" class="active" data-status="all">All</button>
-            <button type="button" data-status="open">Open</button>
-            <button type="button" data-status="closed">Closed</button>
+    <main class="main">
+      <!-- DASHBOARD -->
+      <section class="view active" id="view-dashboard">
+        <div class="view-header">
+          <h1 id="greeting">Welcome back</h1>
+          <p class="view-sub" id="todayDate"></p>
+        </div>
+        <div class="stat-grid" id="statGrid">
+          <div class="stat-card stat-unread skel">
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="num" id="statUnread">–</div>
+            <div class="label">New / unread</div>
+          </div>
+          <div class="stat-card stat-active skel">
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+            <div class="num" id="statActive">–</div>
+            <div class="label">Active conversations</div>
+          </div>
+          <div class="stat-card stat-closed skel">
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="num" id="statClosed">–</div>
+            <div class="label">Closed</div>
+          </div>
+          <div class="stat-card stat-total skel">
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="num" id="statTotal">–</div>
+            <div class="label">Total conversations</div>
+          </div>
+          <div class="stat-card stat-today skel">
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <div class="num" id="statToday">–</div>
+            <div class="label">Today</div>
           </div>
         </div>
-        <div class="conv-list" id="convList"></div>
-      </div>
-      <div class="chat-pane" id="chatPane">
-        <div class="chat-placeholder">Select a conversation to view messages</div>
-      </div>
-    </section>
-  </main>
+      </section>
+
+      <!-- CONVERSATIONS -->
+      <section class="view conv-view" id="view-conversations">
+        <div class="conv-list-pane" id="convListPane">
+          <div class="conv-list-head">
+            <div class="search-row">
+              <div class="search-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" id="convSearch" placeholder="Search name, phone, model…">
+              </div>
+            </div>
+            <div class="segmented" id="statusFilter">
+              <button type="button" class="active" data-status="all">All</button>
+              <button type="button" data-status="open">Open</button>
+              <button type="button" data-status="closed">Closed</button>
+            </div>
+          </div>
+          <div class="conv-list" id="convList"></div>
+        </div>
+
+        <div class="chat-pane" id="chatPane">
+          <div class="chat-placeholder" id="chatPlaceholder">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p>Select a conversation to start replying</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </div>
 
 <div class="toast-stack" id="toastStack"></div>
