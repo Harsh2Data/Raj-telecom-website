@@ -1,95 +1,128 @@
-const fs = require('fs');
-const path = require('path');
-
-const dataDirectory = path.join(__dirname, '../../data');
-const dataFile = path.join(dataDirectory, 'conversations.json');
+const Conversation = require('../models/Conversation');
 
 function normalizePhone(value) {
   const digits = String(value || '').replace(/\D/g, '');
   return digits.length === 10 ? `91${digits}` : digits;
 }
 
-function readStore() {
-  try {
-    if (!fs.existsSync(dataFile)) return { conversations: [], processedMessageIds: [] };
-    return JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-  } catch (error) {
-    console.error('Could not read conversation store:', error.message);
-    return { conversations: [], processedMessageIds: [] };
-  }
-}
-
-function writeStore(store) {
-  fs.mkdirSync(dataDirectory, { recursive: true });
-  fs.writeFileSync(dataFile, JSON.stringify(store, null, 2), 'utf8');
-}
-
 function makeCode() {
   return `RT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 
-function getOrCreateConversation(lead) {
-  const store = readStore();
+// Called from lead.service.js / booking.service.js at lead/booking creation,
+// and from the webhook when a customer messages in. One conversation per
+// customer phone number, reused across leads/bookings/messages.
+async function getOrCreateConversation(lead) {
   const customerPhone = normalizePhone(lead.phone);
-  let conversation = store.conversations.find((item) => item.customerPhone === customerPhone);
+  let conversation = await Conversation.findOne({ customerPhone });
 
   if (!conversation) {
-    conversation = {
+    conversation = await Conversation.create({
       code: makeCode(),
       customerPhone,
+      customerWhatsAppId: customerPhone,
       customerName: lead.name || 'Customer',
-      device: `${lead.brand || ''} ${lead.model || ''}`.trim(),
+      deviceBrand: lead.brand || '',
+      deviceModel: lead.model || '',
       issue: lead.issue || '',
-      status: 'lead',
-      messages: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    store.conversations.push(conversation);
+      status: 'open',
+      stage: 'lead'
+    });
   } else {
-    conversation.customerName = lead.name || conversation.customerName;
-    conversation.device = `${lead.brand || ''} ${lead.model || ''}`.trim() || conversation.device;
-    conversation.issue = lead.issue || conversation.issue;
-    conversation.updatedAt = new Date().toISOString();
+    if (lead.name) conversation.customerName = lead.name;
+    if (lead.brand) conversation.deviceBrand = lead.brand;
+    if (lead.model) conversation.deviceModel = lead.model;
+    if (lead.issue) conversation.issue = lead.issue;
+    await conversation.save();
   }
 
-  writeStore(store);
   return conversation;
 }
 
-function getConversationByCode(code) {
-  const store = readStore();
-  return store.conversations.find((item) => item.code.toUpperCase() === String(code || '').toUpperCase());
+async function getConversationByCode(code) {
+  if (!code) return null;
+  return Conversation.findOne({ code: String(code).toUpperCase() });
 }
 
-function updateConversation(code, changes) {
-  const store = readStore();
-  const conversation = store.conversations.find((item) => item.code.toUpperCase() === String(code || '').toUpperCase());
+async function getConversationById(id) {
+  return Conversation.findById(id);
+}
+
+// Generic field patch — e.g. lead.service.js/booking.service.js move a
+// conversation's lifecycle forward with { stage: 'booking_confirmed' }.
+// Deliberately separate from the open/closed `status` field used by the
+// admin panel, so booking progress and admin triage don't collide.
+async function updateConversation(code, changes) {
+  return Conversation.findOneAndUpdate(
+    { code: String(code || '').toUpperCase() },
+    { $set: changes },
+    { returnDocument: 'after' }
+  );
+}
+
+async function setStatus(id, status) {
+  if (!['open', 'closed'].includes(status)) throw new Error(`Invalid conversation status: ${status}`);
+  return Conversation.findByIdAndUpdate(id, { $set: { status } }, { returnDocument: 'after' });
+}
+
+async function markAsRead(id) {
+  return Conversation.findByIdAndUpdate(id, { $set: { unreadCount: 0 } }, { returnDocument: 'after' });
+}
+
+// Bumps preview fields shown in the conversation list, and — per spec test 5 —
+// reopens a closed conversation when the customer messages again.
+async function touchAfterMessage(conversationId, { text, fromCustomer }) {
+  const update = {
+    lastMessage: text,
+    lastMessageAt: new Date()
+  };
+  const conversation = await Conversation.findById(conversationId);
   if (!conversation) return null;
-  Object.assign(conversation, changes, { updatedAt: new Date().toISOString() });
-  writeStore(store);
+
+  conversation.lastMessage = text;
+  conversation.lastMessageAt = new Date();
+  if (fromCustomer) {
+    conversation.unreadCount += 1;
+    if (conversation.status === 'closed') conversation.status = 'open';
+  }
+  await conversation.save();
   return conversation;
 }
 
-function addMessage(code, direction, text, messageId) {
-  const store = readStore();
-  const conversation = store.conversations.find((item) => item.code.toUpperCase() === String(code || '').toUpperCase());
-  if (!conversation) return null;
-  conversation.messages.push({ direction, text, messageId: messageId || null, at: new Date().toISOString() });
-  conversation.messages = conversation.messages.slice(-50);
-  conversation.updatedAt = new Date().toISOString();
-  writeStore(store);
-  return conversation;
+async function listConversations({ status, search } = {}) {
+  const query = {};
+  if (status && status !== 'all') query.status = status;
+  if (search) {
+    const regex = new RegExp(search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    query.$or = [{ customerName: regex }, { customerPhone: regex }, { deviceModel: regex }, { deviceBrand: regex }];
+  }
+  return Conversation.find(query).sort({ lastMessageAt: -1 });
 }
 
-function isDuplicateMessage(messageId) {
-  if (!messageId) return false;
-  const store = readStore();
-  if (store.processedMessageIds.includes(messageId)) return true;
-  store.processedMessageIds.push(messageId);
-  store.processedMessageIds = store.processedMessageIds.slice(-500);
-  writeStore(store);
-  return false;
+async function dashboardSummary() {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const [unread, active, closed, total, today] = await Promise.all([
+    Conversation.countDocuments({ unreadCount: { $gt: 0 } }),
+    Conversation.countDocuments({ status: 'open' }),
+    Conversation.countDocuments({ status: 'closed' }),
+    Conversation.countDocuments({}),
+    Conversation.countDocuments({ createdAt: { $gte: startOfToday } })
+  ]);
+
+  return { unread, active, closed, total, today };
 }
 
-module.exports = { normalizePhone, getOrCreateConversation, getConversationByCode, updateConversation, addMessage, isDuplicateMessage };
+module.exports = {
+  normalizePhone,
+  getOrCreateConversation,
+  getConversationByCode,
+  getConversationById,
+  updateConversation,
+  setStatus,
+  markAsRead,
+  touchAfterMessage,
+  listConversations,
+  dashboardSummary
+};

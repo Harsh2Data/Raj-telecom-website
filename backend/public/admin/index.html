@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Raj Telecom</title>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">Raj Telecom</div>
+    <nav>
+      <button type="button" data-view="dashboard" class="active">Dashboard</button>
+      <button type="button" data-view="conversations">Conversations</button>
+    </nav>
+    <button type="button" class="logout-btn" id="logoutBtn">Logout</button>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <h2>Dashboard</h2>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num" id="statUnread">–</div><div class="label">New / unread</div></div>
+        <div class="stat-card"><div class="num" id="statActive">–</div><div class="label">Active conversations</div></div>
+        <div class="stat-card"><div class="num" id="statClosed">–</div><div class="label">Closed</div></div>
+        <div class="stat-card"><div class="num" id="statTotal">–</div><div class="label">Total conversations</div></div>
+        <div class="stat-card"><div class="num" id="statToday">–</div><div class="label">Today</div></div>
+      </div>
+    </section>
+
+    <!-- CONVERSATIONS -->
+    <section class="view conv-view" id="view-conversations">
+      <div class="conv-list-pane">
+        <div class="conv-list-head">
+          <h2>Customer Conversations</h2>
+          <input type="search" class="conv-search" id="convSearch" placeholder="Search name, phone, model…">
+          <div class="conv-filters">
+            <button type="button" class="active" data-status="all">All</button>
+            <button type="button" data-status="open">Open</button>
+            <button type="button" data-status="closed">Closed</button>
+          </div>
+        </div>
+        <div class="conv-list" id="convList"></div>
+      </div>
+      <div class="chat-pane" id="chatPane">
+        <div class="chat-placeholder">Select a conversation to view messages</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

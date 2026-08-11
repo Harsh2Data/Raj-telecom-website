@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { sendTextMessage } = require('../services/whatsapp.service');
 const conversationService = require('../services/conversation.service');
+const messageService = require('../services/message.service');
+const { getIO } = require('../realtime/socket');
 
 function validSignature(req) {
   const appSecret = process.env.META_APP_SECRET;
@@ -24,30 +26,97 @@ function messageText(message) {
   return `[${message.type || 'unsupported'} message received]`;
 }
 
-async function handleCustomerMessage(from, customerName, text, messageId) {
-  const conversation = conversationService.getOrCreateConversation({ phone: from, name: customerName });
-  conversationService.addMessage(conversation.code, 'customer', text, messageId);
-  await sendTextMessage(
-    process.env.OWNER_PHONE,
-    `Customer reply from ${conversation.customerName}\nConversation: ${conversation.code}\nMessage: ${text}\n\nReply here using:\n${conversation.code} your reply`
-  );
+// Safe to broadcast even if no admin panel is connected — Socket.IO just has
+// zero listeners in that case.
+function broadcastNewMessage(conversation, message) {
+  try {
+    getIO().emit('message:new', { conversation, message });
+  } catch (error) {
+    // Socket.IO not initialized (shouldn't happen once server.js starts it) — don't fail the webhook over it.
+    console.warn('Socket broadcast skipped:', error.message);
+  }
 }
 
+function broadcastStatus(update) {
+  try {
+    getIO().emit('message:status', update);
+  } catch (error) {
+    console.warn('Socket broadcast skipped:', error.message);
+  }
+}
+
+// A customer texting the business WhatsApp number. Stored in the admin
+// panel's conversation/message system — this is now the primary way the
+// shop sees and answers customer messages (see conversation.controller.js),
+// replacing the old "relay everything to the owner's personal WhatsApp" flow.
+async function handleCustomerMessage(from, customerName, text, messageId) {
+  const conversation = await conversationService.getOrCreateConversation({ phone: from, name: customerName });
+  const { duplicate, message } = await messageService.recordIncoming({
+    conversationId: conversation._id,
+    senderPhone: from,
+    text,
+    whatsappMessageId: messageId
+  });
+  if (duplicate) return;
+  broadcastNewMessage(conversation, message);
+}
+
+// Legacy fallback: the owner can still reply by texting the business number
+// from their own WhatsApp with "RT-XXXX your message" — kept working as-is
+// (not the primary flow anymore, but not removed either) and now also
+// mirrored into the conversation/message store so it shows up correctly in
+// the admin panel regardless of which channel the owner replied from.
 async function handleOwnerReply(text, messageId) {
   const match = String(text || '').trim().match(/^#?(RT-[A-Z0-9-]+)\s+([\s\S]+)/i);
   if (!match) {
-    await sendTextMessage(process.env.OWNER_PHONE, 'Reply format: RT-XXXX your message\nUse the conversation code shown above.');
+    await sendTextMessage(process.env.OWNER_PHONE, 'Reply format: RT-XXXX your message\nUse the conversation code shown in the admin panel.');
     return;
   }
-  const conversation = conversationService.getConversationByCode(match[1]);
+  const conversation = await conversationService.getConversationByCode(match[1]);
   if (!conversation) {
-    await sendTextMessage(process.env.OWNER_PHONE, `Conversation ${match[1]} was not found. Please use a valid code.`);
+    await sendTextMessage(process.env.OWNER_PHONE, `Conversation ${match[1]} was not found.`);
     return;
   }
   const reply = match[2].trim();
-  await sendTextMessage(conversation.customerPhone, reply);
-  conversationService.addMessage(conversation.code, 'owner', reply, messageId);
-  await sendTextMessage(process.env.OWNER_PHONE, `Delivered to ${conversation.customerName} (${conversation.code}).`);
+  const { message } = await messageService.recordOutgoing({
+    conversationId: conversation._id,
+    senderPhone: process.env.OWNER_PHONE || '',
+    text: reply
+  });
+  try {
+    const result = await sendTextMessage(conversation.customerPhone, reply);
+    await messageService.markSent(message._id, result?.messages?.[0]?.id);
+    broadcastNewMessage(conversation, message);
+    await sendTextMessage(process.env.OWNER_PHONE, `Delivered to ${conversation.customerName} (${conversation.code}).`);
+  } catch (error) {
+    await messageService.markFailed(message._id);
+    await sendTextMessage(process.env.OWNER_PHONE, `Could not deliver to ${conversation.customerName}: ${error.message}`);
+  }
+}
+
+async function handleIncomingMessages(value) {
+  const contacts = value.contacts || [];
+  const contactNames = new Map(contacts.map((contact) => [contact.wa_id, contact.profile?.name || 'Customer']));
+
+  for (const message of value.messages || []) {
+    const from = conversationService.normalizePhone(message.from);
+    const text = messageText(message);
+    if (!text) continue;
+    if (from === conversationService.normalizePhone(process.env.OWNER_PHONE)) {
+      await handleOwnerReply(text, message.id);
+    } else {
+      await handleCustomerMessage(from, contactNames.get(message.from) || 'Customer', text, message.id);
+    }
+  }
+}
+
+async function handleStatusUpdates(value) {
+  for (const status of value.statuses || []) {
+    const updated = await messageService.updateStatusByWhatsAppId(status.id, status.status);
+    if (updated) {
+      broadcastStatus({ messageId: updated._id, conversationId: updated.conversationId, status: status.status });
+    }
+  }
 }
 
 router.get('/webhook', (req, res) => {
@@ -59,40 +128,17 @@ router.get('/webhook', (req, res) => {
 });
 
 router.post('/webhook', async (req, res) => {
-    console.log('🔥 WEBHOOK POST RECEIVED');
-    console.log('Headers:', req.headers);
-    console.log('Body:', JSON.stringify(req.body, null, 2));
-
-console.log('RAW BODY EXISTS:', !!req.rawBody);
-console.log('RAW BODY LENGTH:', req.rawBody?.length);
-console.log('SIGNATURE EXISTS:', !!req.get('x-hub-signature-256'));
-console.log('APP SECRET EXISTS:', !!process.env.META_APP_SECRET);
-
-if (!validSignature(req)) {
+  if (!validSignature(req)) {
     console.log('❌ Invalid webhook signature');
     return res.sendStatus(401);
-}
-
-  console.log('✅ Webhook signature valid');
+  }
 
   try {
-    console.log('📦 Webhook body:', JSON.stringify(req.body, null, 2));
     const changes = req.body?.entry?.flatMap((entry) => entry.changes || []) || [];
     for (const change of changes) {
       const value = change.value || {};
-      const contacts = value.contacts || [];
-      const contactNames = new Map(contacts.map((contact) => [contact.wa_id, contact.profile?.name || 'Customer']));
-      for (const message of value.messages || []) {
-        if (conversationService.isDuplicateMessage(message.id)) continue;
-        const from = conversationService.normalizePhone(message.from);
-        const text = messageText(message);
-        if (!text) continue;
-        if (from === conversationService.normalizePhone(process.env.OWNER_PHONE)) {
-          await handleOwnerReply(text, message.id);
-        } else {
-          await handleCustomerMessage(from, contactNames.get(message.from) || 'Customer', text, message.id);
-        }
-      }
+      if (value.messages?.length) await handleIncomingMessages(value);
+      if (value.statuses?.length) await handleStatusUpdates(value);
     }
     return res.sendStatus(200);
   } catch (error) {
