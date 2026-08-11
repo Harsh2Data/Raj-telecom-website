@@ -33,8 +33,11 @@
     selectedId: null,
     selectedConversation: null,
     selectedMessages: [],
-    muted: localStorage.getItem(MUTE_KEY) === '1'
+    muted: localStorage.getItem(MUTE_KEY) === '1',
+    windowTimerId: null
   };
+
+  const VIEW_DISPLAY = { dashboard: 'block', conversations: 'flex', settings: 'block' };
 
   const el = {
     sidebar: document.getElementById('sidebar'),
@@ -64,7 +67,22 @@
     statClosed: document.getElementById('statClosed'),
     statTotal: document.getElementById('statTotal'),
     statToday: document.getElementById('statToday'),
-    statGrid: document.getElementById('statGrid')
+    statGrid: document.getElementById('statGrid'),
+    profileName: document.getElementById('profileName'),
+    profileEmail: document.getElementById('profileEmail'),
+    saveProfileBtn: document.getElementById('saveProfileBtn'),
+    profileMsg: document.getElementById('profileMsg'),
+    curPassword: document.getElementById('curPassword'),
+    newPassword: document.getElementById('newPassword'),
+    confirmPassword: document.getElementById('confirmPassword'),
+    savePasswordBtn: document.getElementById('savePasswordBtn'),
+    passwordMsg: document.getElementById('passwordMsg'),
+    adminTeamList: document.getElementById('adminTeamList'),
+    newAdminName: document.getElementById('newAdminName'),
+    newAdminEmail: document.getElementById('newAdminEmail'),
+    newAdminPassword: document.getElementById('newAdminPassword'),
+    addAdminBtn: document.getElementById('addAdminBtn'),
+    addAdminMsg: document.getElementById('addAdminMsg')
   };
 
   /* ---------------- Auth gate ---------------- */
@@ -85,6 +103,8 @@
     setupLogout();
     setupMute();
     setupConversationControls();
+    setupSettings();
+    showView('dashboard');
     loadDashboard();
     loadConversations();
     connectSocket();
@@ -135,15 +155,30 @@
     el.sidebarBackdrop.addEventListener('click', close);
   }
 
+  const VIEW_TITLES = { dashboard: 'Dashboard', conversations: 'Conversations', settings: 'Settings' };
+
+  // Display is set inline (not via a CSS class) — see the comment above
+  // .view in admin.css: a plain `.active { display: block }` rule can't
+  // express that the conversations view needs `display:flex` while the
+  // others need `display:block`, and that specificity clash was the root
+  // cause of the conversations screen rendering broken/overlapping.
+  function showView(name) {
+    el.views.forEach((v) => { v.style.display = 'none'; v.classList.remove('active'); });
+    const view = document.getElementById(`view-${name}`);
+    view.style.display = VIEW_DISPLAY[name] || 'block';
+    view.classList.add('active');
+
+    el.navBtns.forEach((b) => b.classList.toggle('active', b.dataset.view === name));
+    el.topbarTitle.textContent = VIEW_TITLES[name] || '';
+
+    if (name === 'dashboard') loadDashboard();
+    if (name === 'settings') loadSettings();
+  }
+
   function setupNav() {
     el.navBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        el.navBtns.forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-        el.views.forEach((v) => v.classList.remove('active'));
-        document.getElementById(`view-${btn.dataset.view}`).classList.add('active');
-        el.topbarTitle.textContent = btn.dataset.view === 'dashboard' ? 'Dashboard' : 'Conversations';
-        if (btn.dataset.view === 'dashboard') loadDashboard();
+        showView(btn.dataset.view);
         el.sidebar.classList.remove('open');
         el.sidebarBackdrop.classList.remove('open');
       });
@@ -169,6 +204,105 @@
       localStorage.setItem(MUTE_KEY, state.muted ? '1' : '0');
       render();
     });
+  }
+
+  /* ---------------- Settings ---------------- */
+  function setSettingsMsg(el2, text, ok) {
+    el2.textContent = text;
+    el2.classList.toggle('ok', !!ok);
+    el2.classList.toggle('error', !ok);
+  }
+
+  function setupSettings() {
+    el.saveProfileBtn.addEventListener('click', async () => {
+      const name = el.profileName.value.trim();
+      if (!name) return setSettingsMsg(el.profileMsg, 'Name cannot be empty.', false);
+      el.saveProfileBtn.disabled = true;
+      try {
+        const { admin } = await AdminAPI.updateProfile({ name });
+        state.admin = admin;
+        renderAdminCard();
+        renderGreeting();
+        setSettingsMsg(el.profileMsg, 'Saved.', true);
+      } catch (error) {
+        setSettingsMsg(el.profileMsg, error.message, false);
+      } finally {
+        el.saveProfileBtn.disabled = false;
+      }
+    });
+
+    el.savePasswordBtn.addEventListener('click', async () => {
+      const currentPassword = el.curPassword.value;
+      const newPassword = el.newPassword.value;
+      const confirmPassword = el.confirmPassword.value;
+      if (!currentPassword || !newPassword) return setSettingsMsg(el.passwordMsg, 'Fill in both password fields.', false);
+      if (newPassword.length < 8) return setSettingsMsg(el.passwordMsg, 'New password must be at least 8 characters.', false);
+      if (newPassword !== confirmPassword) return setSettingsMsg(el.passwordMsg, 'New password and confirmation do not match.', false);
+
+      el.savePasswordBtn.disabled = true;
+      try {
+        await AdminAPI.updateProfile({ currentPassword, newPassword });
+        el.curPassword.value = '';
+        el.newPassword.value = '';
+        el.confirmPassword.value = '';
+        setSettingsMsg(el.passwordMsg, 'Password updated.', true);
+      } catch (error) {
+        setSettingsMsg(el.passwordMsg, error.message, false);
+      } finally {
+        el.savePasswordBtn.disabled = false;
+      }
+    });
+
+    el.addAdminBtn.addEventListener('click', async () => {
+      const name = el.newAdminName.value.trim();
+      const email = el.newAdminEmail.value.trim();
+      const password = el.newAdminPassword.value;
+      if (!name || !email || !password) return setSettingsMsg(el.addAdminMsg, 'Fill in name, email and password.', false);
+      if (password.length < 8) return setSettingsMsg(el.addAdminMsg, 'Password must be at least 8 characters.', false);
+
+      el.addAdminBtn.disabled = true;
+      try {
+        await AdminAPI.createAdmin(name, email, password);
+        el.newAdminName.value = '';
+        el.newAdminEmail.value = '';
+        el.newAdminPassword.value = '';
+        setSettingsMsg(el.addAdminMsg, `${name} can now log in.`, true);
+        loadAdminTeam();
+      } catch (error) {
+        setSettingsMsg(el.addAdminMsg, error.message, false);
+      } finally {
+        el.addAdminBtn.disabled = false;
+      }
+    });
+  }
+
+  function loadSettings() {
+    if (state.admin) {
+      el.profileName.value = state.admin.name || '';
+      el.profileEmail.value = state.admin.email || '';
+    }
+    loadAdminTeam();
+  }
+
+  async function loadAdminTeam() {
+    el.adminTeamList.innerHTML = Array.from({ length: 2 }).map(() => `
+      <div class="admin-team-row"><div class="skel-circle"></div><div class="skel-lines"><div class="skel-line w60"></div><div class="skel-line w40"></div></div></div>
+    `).join('');
+    try {
+      const { admins } = await AdminAPI.listAdmins();
+      el.adminTeamList.innerHTML = admins.map((a) => `
+        <div class="admin-team-row">
+          <span class="conv-avatar" style="background:${colorFor(a.email)}">${initials(a.name)}</span>
+          <div class="admin-team-info">
+            <div class="admin-team-name">${escapeHtml(a.name)}${state.admin && a.email === state.admin.email ? ' (you)' : ''}</div>
+            <div class="admin-team-email">${escapeHtml(a.email)}</div>
+          </div>
+          <span class="admin-team-date">${new Date(a.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+        </div>
+      `).join('');
+    } catch (error) {
+      el.adminTeamList.innerHTML = `<p style="color:var(--text-mute);font-size:0.82rem;">Could not load the admin list: ${escapeHtml(error.message)}</p>`;
+    }
   }
 
   /* ---------------- Dashboard ---------------- */
@@ -328,6 +462,56 @@
   function deselectConversation() {
     state.selectedId = null;
     el.convView.classList.remove('chat-open');
+    stopWindowTimer();
+  }
+
+  function stopWindowTimer() {
+    if (state.windowTimerId) {
+      clearInterval(state.windowTimerId);
+      state.windowTimerId = null;
+    }
+  }
+
+  function lastCustomerMessageAt(messages) {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].senderType === 'customer') return new Date(messages[i].createdAt);
+    }
+    return null;
+  }
+
+  function windowRemainingLabel(msRemaining) {
+    const totalMinutes = Math.max(0, Math.floor(msRemaining / 60000));
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
+  }
+
+  function renderWindowTimer(lastAt) {
+    const bar = document.getElementById('windowTimerBar');
+    if (!bar) return;
+    if (!lastAt) {
+      bar.style.display = 'none';
+      bar.innerHTML = '';
+      return;
+    }
+    bar.style.display = 'flex';
+    const msRemaining = 24 * 60 * 60 * 1000 - (Date.now() - lastAt.getTime());
+    if (msRemaining <= 0) {
+      bar.className = 'window-timer closed';
+      bar.innerHTML = `<span class="live-dot"></span> 24-hour reply window closed — only WhatsApp template messages will deliver until the customer messages again.`;
+    } else {
+      const cls = msRemaining < 2 * 60 * 60 * 1000 ? 'warn' : 'ok';
+      bar.className = `window-timer ${cls}`;
+      bar.innerHTML = `<span class="live-dot"></span> <strong>${windowRemainingLabel(msRemaining)}</strong> left in the free reply window`;
+    }
+  }
+
+  function startWindowTimer(messages) {
+    stopWindowTimer();
+    const lastAt = lastCustomerMessageAt(messages);
+    renderWindowTimer(lastAt);
+    state.windowTimerId = setInterval(() => renderWindowTimer(lastCustomerMessageAt(state.selectedMessages)), 30000);
   }
 
   function statusTick(m) {
@@ -376,19 +560,9 @@
     localStorage.setItem(QUICK_REPLIES_KEY, JSON.stringify(list));
   }
 
-  function lastCustomerMessageWithin24h(messages) {
-    for (let i = messages.length - 1; i >= 0; i--) {
-      if (messages[i].senderType === 'customer') {
-        return (Date.now() - new Date(messages[i].createdAt).getTime()) < 24 * 60 * 60 * 1000;
-      }
-    }
-    return false;
-  }
-
   function renderChat(conversation, messages) {
     const device = [conversation.deviceBrand, conversation.deviceModel].filter(Boolean).join(' ');
     const phoneDigits = conversation.customerPhone.replace(/\D/g, '');
-    const withinWindow = lastCustomerMessageWithin24h(messages);
     const quickReplies = getQuickReplies();
 
     el.chatPane.innerHTML = `
@@ -398,11 +572,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
           <span class="chat-avatar" style="background:${colorFor(conversation.customerPhone)}">${initials(conversation.customerName)}</span>
-          <div style="min-width:0;">
+          <div class="chat-head-text">
             <h3>${escapeHtml(conversation.customerName)}</h3>
             <div class="meta">
               <a href="tel:+${phoneDigits}">${ICONS.call} ${escapeHtml(conversation.customerPhone)}</a>
-              <a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener">${ICONS.whatsapp} WhatsApp</a>
+              <a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener">${ICONS.whatsapp} <span class="whatsapp-label">WhatsApp</span></a>
               ${device ? `<span>${escapeHtml(device)}</span>` : ''}
             </div>
           </div>
@@ -413,8 +587,8 @@
           </button>
         </div>
       </div>
-      ${conversation.issue ? `<div class="window-warning" style="background:var(--surface-alt);color:var(--text-soft);border-bottom:1px solid var(--border-soft);">Issue: ${escapeHtml(conversation.issue)}</div>` : ''}
-      ${!withinWindow ? `<div class="window-warning">${ICONS.alert} 24-hour reply window closed — only WhatsApp template messages will deliver until the customer messages again.</div>` : ''}
+      ${conversation.issue ? `<div class="window-warning" style="background:var(--surface-alt);color:var(--text-soft);border-bottom:1px solid var(--border-soft);"><span>Issue: ${escapeHtml(conversation.issue)}</span></div>` : ''}
+      <div class="window-timer" id="windowTimerBar"></div>
       <div class="chat-messages" id="chatMessages">${renderMessagesWithSeparators(messages)}</div>
       <div class="quick-replies-bar" id="quickRepliesBar">
         ${quickReplies.map((q) => `<button type="button" class="quick-chip" data-text="${escapeHtml(q)}">${escapeHtml(q.length > 42 ? q.slice(0, 42) + '…' : q)}</button>`).join('')}
@@ -427,6 +601,7 @@
       </div>
     `;
     scrollChatToBottom();
+    startWindowTimer(messages);
 
     document.getElementById('chatBackBtn').addEventListener('click', deselectConversation);
 
@@ -576,6 +751,8 @@
           if (thisDay !== lastDay) html += `<div class="chat-day-sep"><span>${thisDay}</span></div>`;
           html += msgBubble(message);
           box.insertAdjacentHTML('beforeend', html);
+          const lastRow = box.querySelector(`.msg-row[data-message-id="${message._id}"]`);
+          if (lastRow) lastRow.classList.add('msg-in');
           scrollChatToBottom();
         }
         if (message.senderType === 'customer') AdminAPI.getConversation(conversation._id).catch(() => {});
@@ -640,7 +817,10 @@
     toast.innerHTML = `<span class="toast-icon">${ICONS.bell}</span><div class="toast-body"><b>${escapeHtml(title)}</b><span>${escapeHtml(body)}</span></div>`;
     if (onClick) toast.addEventListener('click', onClick);
     el.toastStack.appendChild(toast);
-    setTimeout(() => toast.remove(), 6000);
+    setTimeout(() => {
+      toast.classList.add('leaving');
+      setTimeout(() => toast.remove(), 220);
+    }, 6000);
   }
 
   function notify(customerName, messageText, conversationId) {

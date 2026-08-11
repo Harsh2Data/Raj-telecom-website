@@ -33,6 +33,10 @@
         Conversations
         <span class="nav-badge" id="navUnreadBadge" hidden>0</span>
       </button>
+      <button type="button" class="nav-item" data-view="settings">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
     </nav>
 
     <div class="sidebar-bottom">
@@ -118,6 +122,46 @@
           <div class="chat-placeholder" id="chatPlaceholder">
             <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <p>Select a conversation to start replying</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="view-settings">
+        <div class="view-header">
+          <h1>Settings</h1>
+          <p class="view-sub">Manage your account and who has access to the admin panel.</p>
+        </div>
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>Your profile</h3>
+            <div class="field"><label for="profileName">Name</label><input type="text" id="profileName"></div>
+            <div class="field"><label for="profileEmail">Email</label><input type="email" id="profileEmail" disabled></div>
+            <button type="button" class="btn btn-primary btn-sm btn-block" id="saveProfileBtn">Save name</button>
+            <p class="settings-msg" id="profileMsg"></p>
+
+            <hr class="settings-divider">
+
+            <h3>Change password</h3>
+            <div class="field"><label for="curPassword">Current password</label><input type="password" id="curPassword" autocomplete="current-password"></div>
+            <div class="field"><label for="newPassword">New password</label><input type="password" id="newPassword" autocomplete="new-password"></div>
+            <div class="field"><label for="confirmPassword">Confirm new password</label><input type="password" id="confirmPassword" autocomplete="new-password"></div>
+            <button type="button" class="btn btn-primary btn-sm btn-block" id="savePasswordBtn">Update password</button>
+            <p class="settings-msg" id="passwordMsg"></p>
+          </div>
+
+          <div class="settings-card">
+            <h3>Admin team</h3>
+            <div class="admin-team-list" id="adminTeamList"></div>
+
+            <hr class="settings-divider">
+
+            <h4>Add a new admin</h4>
+            <div class="field"><label for="newAdminName">Name</label><input type="text" id="newAdminName" placeholder="e.g. Store staff"></div>
+            <div class="field"><label for="newAdminEmail">Email</label><input type="email" id="newAdminEmail"></div>
+            <div class="field"><label for="newAdminPassword">Temporary password</label><input type="password" id="newAdminPassword" placeholder="At least 8 characters"></div>
+            <button type="button" class="btn btn-primary btn-sm btn-block" id="addAdminBtn">Add admin</button>
+            <p class="settings-msg" id="addAdminMsg"></p>
           </div>
         </div>
       </section>

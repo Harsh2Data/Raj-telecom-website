@@ -32,6 +32,11 @@ window.AdminAPI = (function () {
     sendMessage: (id, text) =>
       request(`/api/admin/conversations/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
     setStatus: (id, status) =>
-      request(`/api/admin/conversations/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) })
+      request(`/api/admin/conversations/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+    listAdmins: () => request('/api/admin/auth/admins'),
+    createAdmin: (name, email, password) =>
+      request('/api/admin/auth/admins', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
+    updateProfile: (changes) =>
+      request('/api/admin/auth/me', { method: 'PATCH', body: JSON.stringify(changes) })
   };
 })();
