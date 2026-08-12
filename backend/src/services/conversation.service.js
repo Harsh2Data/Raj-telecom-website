@@ -65,6 +65,13 @@ async function setStatus(id, status) {
   return Conversation.findByIdAndUpdate(id, { $set: { status } }, { returnDocument: 'after' });
 }
 
+const REPAIR_STAGES = ['new_lead', 'inspection', 'estimate_sent', 'repair_approved', 'repair_in_progress', 'ready_for_pickup', 'completed'];
+
+async function setRepairStage(id, repairStage) {
+  if (!REPAIR_STAGES.includes(repairStage)) throw new Error(`Invalid repair stage: ${repairStage}`);
+  return Conversation.findByIdAndUpdate(id, { $set: { repairStage } }, { returnDocument: 'after' });
+}
+
 async function markAsRead(id) {
   return Conversation.findByIdAndUpdate(id, { $set: { unreadCount: 0 } }, { returnDocument: 'after' });
 }
@@ -83,18 +90,38 @@ async function touchAfterMessage(conversationId, { text, fromCustomer }) {
   conversation.lastMessageAt = new Date();
   if (fromCustomer) {
     conversation.unreadCount += 1;
+    conversation.lastCustomerMessageAt = new Date();
     if (conversation.status === 'closed') conversation.status = 'open';
   }
   await conversation.save();
   return conversation;
 }
 
-async function listConversations({ status, search } = {}) {
+const WHATSAPP_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+// A conversation's 24h free-reply window closes at lastCustomerMessageAt+24h.
+// "Expiring soon" = that close time is still in the future, but within
+// EXPIRING_SOON_MINUTES (default 120) from now — expressed as a range on
+// lastCustomerMessageAt so it's a plain indexed-field query, no per-document
+// computation needed.
+function expiringSoonRange() {
+  const now = Date.now();
+  const thresholdMs = (Number(process.env.EXPIRING_SOON_MINUTES) || 120) * 60000;
+  return { $gt: new Date(now - WHATSAPP_WINDOW_MS), $lte: new Date(now - WHATSAPP_WINDOW_MS + thresholdMs) };
+}
+
+async function listConversations({ status, search, repairStage, expiringSoon } = {}) {
   const query = {};
-  if (status && status !== 'all') query.status = status;
+  if (expiringSoon) {
+    query.status = 'open';
+    query.lastCustomerMessageAt = expiringSoonRange();
+  } else if (status && status !== 'all') {
+    query.status = status;
+  }
+  if (repairStage && repairStage !== 'all') query.repairStage = repairStage;
   if (search) {
     const regex = new RegExp(search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-    query.$or = [{ customerName: regex }, { customerPhone: regex }, { deviceModel: regex }, { deviceBrand: regex }];
+    query.$or = [{ customerName: regex }, { customerPhone: regex }, { deviceModel: regex }, { deviceBrand: regex }, { code: regex }];
   }
   return Conversation.find(query).sort({ lastMessageAt: -1 });
 }
@@ -103,15 +130,16 @@ async function dashboardSummary() {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 
-  const [unread, active, closed, total, today] = await Promise.all([
+  const [unread, active, closed, total, today, expiringSoon] = await Promise.all([
     Conversation.countDocuments({ unreadCount: { $gt: 0 } }),
     Conversation.countDocuments({ status: 'open' }),
     Conversation.countDocuments({ status: 'closed' }),
     Conversation.countDocuments({}),
-    Conversation.countDocuments({ createdAt: { $gte: startOfToday } })
+    Conversation.countDocuments({ createdAt: { $gte: startOfToday } }),
+    Conversation.countDocuments({ status: 'open', lastCustomerMessageAt: expiringSoonRange() })
   ]);
 
-  return { unread, active, closed, total, today };
+  return { unread, active, closed, total, today, expiringSoon };
 }
 
 module.exports = {
@@ -121,6 +149,7 @@ module.exports = {
   getConversationById,
   updateConversation,
   setStatus,
+  setRepairStage,
   markAsRead,
   touchAfterMessage,
   listConversations,

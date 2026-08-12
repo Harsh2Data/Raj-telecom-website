@@ -10,9 +10,22 @@ const conversationSchema = new mongoose.Schema({
   issue: { type: String, default: '' },
   status: { type: String, enum: ['open', 'closed'], default: 'open', index: true }, // conversation open/closed, for the admin panel
   stage: { type: String, default: 'lead' }, // lead lifecycle marker (lead / booking_confirmed / ...), separate from open/closed
+  // Repair workflow stage — deliberately separate from `stage` above (which
+  // tracks lead/booking lifecycle) so neither concern breaks the other.
+  repairStage: {
+    type: String,
+    enum: ['new_lead', 'inspection', 'estimate_sent', 'repair_approved', 'repair_in_progress', 'ready_for_pickup', 'completed'],
+    default: 'new_lead'
+  },
   unreadCount: { type: Number, default: 0 },
   lastMessage: { type: String, default: '' },
-  lastMessageAt: { type: Date, default: Date.now }
+  lastMessageAt: { type: Date, default: Date.now },
+  // Timestamp of the most recent message FROM the customer specifically
+  // (unlike lastMessageAt, which updates on owner messages too) — this is
+  // what the WhatsApp 24h customer-service window is actually measured
+  // from, and lets "expiring soon" be queried cheaply across all
+  // conversations instead of loading every message history.
+  lastCustomerMessageAt: { type: Date, default: null }
 }, { timestamps: true });
 
 // Search (name/phone/device) is done with case-insensitive regex in the

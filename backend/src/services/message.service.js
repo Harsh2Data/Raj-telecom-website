@@ -4,7 +4,7 @@ const { touchAfterMessage } = require('./conversation.service');
 // Inbound (customer) message from the webhook. Dedupes on whatsappMessageId
 // so a retried webhook delivery doesn't create a second copy — Meta retries
 // webhook calls that don't get a fast 200 response.
-async function recordIncoming({ conversationId, senderPhone, text, whatsappMessageId, messageType = 'text' }) {
+async function recordIncoming({ conversationId, senderPhone, text, whatsappMessageId, messageType = 'text', mediaId, mediaMimeType, mediaFilename, mediaCaption }) {
   if (whatsappMessageId) {
     const existing = await Message.findOne({ whatsappMessageId });
     if (existing) return { duplicate: true, message: existing };
@@ -17,7 +17,11 @@ async function recordIncoming({ conversationId, senderPhone, text, whatsappMessa
     message: text,
     messageType,
     whatsappMessageId: whatsappMessageId || undefined,
-    status: 'delivered'
+    status: 'delivered',
+    mediaId,
+    mediaMimeType,
+    mediaFilename,
+    mediaCaption
   });
 
   const conversation = await touchAfterMessage(conversationId, { text, fromCustomer: true });

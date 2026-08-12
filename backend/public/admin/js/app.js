@@ -1,6 +1,8 @@
 (function () {
   const QUICK_REPLIES_KEY = 'rt_admin_quick_replies';
   const MUTE_KEY = 'rt_admin_muted';
+  const NOTIF_KEY = 'rt_admin_notifications';
+  const NOTIF_MAX = 20;
   const DEFAULT_QUICK_REPLIES = [
     'Thanks for reaching out! We\'ll check your device and get back to you shortly.',
     'Your device is ready for pickup at the shop.',
@@ -20,21 +22,38 @@
     send: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
     bell: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
     bellOff: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a1.94 1.94 0 0 1-3.41 0"/><path d="M18.63 13A17.89 17.89 0 0 1 18 8"/><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 0 0-9.33-5"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
-    empty: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+    empty: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    expand: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
+    file: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+    template: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
   };
 
   const AVATAR_COLORS = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6', '#ef4444', '#14b8a6'];
 
+  const REPAIR_STAGE_LABELS = {
+    new_lead: 'New Lead',
+    inspection: 'Inspection',
+    estimate_sent: 'Estimate Sent',
+    repair_approved: 'Repair Approved',
+    repair_in_progress: 'Repair In Progress',
+    ready_for_pickup: 'Ready for Pickup',
+    completed: 'Completed'
+  };
+  const REPAIR_STAGE_ORDER = Object.keys(REPAIR_STAGE_LABELS);
+  const EXPIRING_SOON_MS = 2 * 60 * 60 * 1000; // mirrors the backend's default EXPIRING_SOON_MINUTES
+
   const state = {
     admin: null,
     conversations: [],
-    statusFilter: 'all',
+    filterValue: 'all',
     search: '',
     selectedId: null,
     selectedConversation: null,
     selectedMessages: [],
     muted: localStorage.getItem(MUTE_KEY) === '1',
-    windowTimerId: null
+    windowTimerId: null,
+    notifications: [],
+    templates: null
   };
 
   const VIEW_DISPLAY = { dashboard: 'block', conversations: 'flex', settings: 'block' };
@@ -59,15 +78,22 @@
     convList: document.getElementById('convList'),
     convView: document.getElementById('view-conversations'),
     convSearch: document.getElementById('convSearch'),
-    filterBtns: document.querySelectorAll('.segmented button'),
+    convFilterSelect: document.getElementById('convFilterSelect'),
     chatPane: document.getElementById('chatPane'),
     toastStack: document.getElementById('toastStack'),
     statUnread: document.getElementById('statUnread'),
     statActive: document.getElementById('statActive'),
+    statExpiring: document.getElementById('statExpiring'),
     statClosed: document.getElementById('statClosed'),
     statTotal: document.getElementById('statTotal'),
     statToday: document.getElementById('statToday'),
     statGrid: document.getElementById('statGrid'),
+    notifBellBtn: document.getElementById('notifBellBtn'),
+    notifBadge: document.getElementById('notifBadge'),
+    notifPanel: document.getElementById('notifPanel'),
+    notifList: document.getElementById('notifList'),
+    notifMarkAllBtn: document.getElementById('notifMarkAllBtn'),
+    waStatusList: document.getElementById('waStatusList'),
     profileName: document.getElementById('profileName'),
     profileEmail: document.getElementById('profileEmail'),
     saveProfileBtn: document.getElementById('saveProfileBtn'),
@@ -103,7 +129,10 @@
     setupLogout();
     setupMute();
     setupConversationControls();
+    setupDashboardCardLinks();
     setupSettings();
+    setupNotificationCenter();
+    setupTemplatePickerTrigger();
     showView('dashboard');
     loadDashboard();
     loadConversations();
@@ -282,6 +311,27 @@
       el.profileEmail.value = state.admin.email || '';
     }
     loadAdminTeam();
+    loadWaStatus();
+  }
+
+  async function loadWaStatus() {
+    try {
+      const status = await AdminAPI.whatsappStatus();
+      const rows = [
+        ['Outbound messaging', status.outboundConfigured],
+        ['Webhook verification', status.webhookVerificationConfigured],
+        ['Webhook signature check', status.webhookSignatureConfigured]
+      ];
+      el.waStatusList.innerHTML = rows.map(([label, ok]) => `
+        <div class="wa-status-row">
+          <span class="wa-status-dot ${ok ? 'ok' : 'off'}"></span>
+          <span>${escapeHtml(label)}</span>
+          <span class="wa-status-value">${ok ? 'Connected' : 'Not configured'}</span>
+        </div>
+      `).join('');
+    } catch (error) {
+      el.waStatusList.innerHTML = `<p style="color:var(--text-mute);font-size:0.82rem;">Could not load WhatsApp status: ${escapeHtml(error.message)}</p>`;
+    }
   }
 
   async function loadAdminTeam() {
@@ -312,6 +362,7 @@
       el.statGrid.querySelectorAll('.stat-card').forEach((c) => c.classList.remove('skel'));
       el.statUnread.textContent = summary.unread;
       el.statActive.textContent = summary.active;
+      el.statExpiring.textContent = summary.expiringSoon;
       el.statClosed.textContent = summary.closed;
       el.statTotal.textContent = summary.total;
       el.statToday.textContent = summary.today;
@@ -319,6 +370,18 @@
     } catch (error) {
       console.error('Dashboard load failed:', error.message);
     }
+  }
+
+  // Clicking a dashboard stat card jumps to Conversations pre-filtered —
+  // "New message -> notification -> click -> conversation opens" is the
+  // primary workflow this panel is built around.
+  function setupDashboardCardLinks() {
+    el.statGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-goto-filter]');
+      if (!card) return;
+      showView('conversations');
+      applyFilter(card.dataset.gotoFilter);
+    });
   }
 
   function updateUnreadBadge(count) {
@@ -343,14 +406,7 @@
       }, 250);
     });
 
-    el.filterBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        el.filterBtns.forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.statusFilter = btn.dataset.status;
-        loadConversations();
-      });
-    });
+    el.convFilterSelect.addEventListener('change', () => applyFilter(el.convFilterSelect.value));
 
     document.addEventListener('keydown', (e) => {
       if (e.key === '/' && document.activeElement !== el.convSearch && !/input|textarea/i.test(document.activeElement.tagName)) {
@@ -358,6 +414,22 @@
         el.convSearch.focus();
       }
     });
+  }
+
+  function applyFilter(value) {
+    state.filterValue = value;
+    el.convFilterSelect.value = value;
+    loadConversations();
+  }
+
+  // Translates the single filter-select value into API params. "unread" has
+  // no server-side param (the list isn't paginated, so filtering the already
+  // -fetched page client-side is equivalent and avoids a redundant endpoint).
+  function filterToParams(value) {
+    if (value === 'expiring') return { expiringSoon: true };
+    if (value.startsWith('stage:')) return { repairStage: value.slice(6) };
+    if (value === 'unread') return { status: 'all' };
+    return { status: value };
   }
 
   function renderSkeletonList() {
@@ -377,8 +449,9 @@
   async function loadConversations() {
     if (firstLoad) { renderSkeletonList(); firstLoad = false; }
     try {
-      const { conversations } = await AdminAPI.listConversations({ status: state.statusFilter, search: state.search });
-      state.conversations = conversations;
+      const params = { search: state.search, ...filterToParams(state.filterValue) };
+      const { conversations } = await AdminAPI.listConversations(params);
+      state.conversations = state.filterValue === 'unread' ? conversations.filter((c) => c.unreadCount > 0) : conversations;
       renderConvList();
     } catch (error) {
       console.error('Conversation list load failed:', error.message);
@@ -404,6 +477,17 @@
     return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
   }
 
+  // Static (non-ticking) window read for list rows — the live per-second
+  // countdown is only in the open chat header; the list just needs a quick
+  // visual flag, refreshed whenever the list reloads or a conversation is upserted.
+  function listWindowBadge(c) {
+    if (c.status !== 'open' || !c.lastCustomerMessageAt) return '';
+    const remaining = 24 * 60 * 60 * 1000 - (Date.now() - new Date(c.lastCustomerMessageAt).getTime());
+    if (remaining <= 0) return '<span class="mini-pill closed">Window expired</span>';
+    if (remaining <= EXPIRING_SOON_MS) return `<span class="mini-pill warn">${windowRemainingLabel(remaining)} left</span>`;
+    return '';
+  }
+
   function renderConvList() {
     if (!state.conversations.length) {
       el.convList.innerHTML = `<div class="conv-empty">${ICONS.empty}<div>No conversations found.</div></div>`;
@@ -421,6 +505,8 @@
           <div class="conv-item-last">${escapeHtml(c.lastMessage || 'No messages yet')}</div>
           <div class="conv-item-badges">
             <span class="status-pill ${c.status}">${c.status}</span>
+            <span class="mini-pill stage">${escapeHtml(REPAIR_STAGE_LABELS[c.repairStage] || 'New Lead')}</span>
+            ${listWindowBadge(c)}
             ${c.unreadCount > 0 ? `<span class="unread-dot">${c.unreadCount}</span>` : ''}
           </div>
         </div>
@@ -499,9 +585,9 @@
     const msRemaining = 24 * 60 * 60 * 1000 - (Date.now() - lastAt.getTime());
     if (msRemaining <= 0) {
       bar.className = 'window-timer closed';
-      bar.innerHTML = `<span class="live-dot"></span> 24-hour reply window closed — only WhatsApp template messages will deliver until the customer messages again.`;
+      bar.innerHTML = `<span class="live-dot"></span> 24-hour reply window closed — only an approved WhatsApp template can be sent. <button type="button" class="send-template-btn" id="openTemplatePickerBtn">${ICONS.template} Send Template</button>`;
     } else {
-      const cls = msRemaining < 2 * 60 * 60 * 1000 ? 'warn' : 'ok';
+      const cls = msRemaining < EXPIRING_SOON_MS ? 'warn' : 'ok';
       bar.className = `window-timer ${cls}`;
       bar.innerHTML = `<span class="live-dot"></span> <strong>${windowRemainingLabel(msRemaining)}</strong> left in the free reply window`;
     }
@@ -524,11 +610,30 @@
     return '';
   }
 
+  function mediaContent(m) {
+    const url = AdminAPI.mediaUrl(m._id);
+    const caption = m.mediaCaption ? `<div class="msg-media-caption">${escapeHtml(m.mediaCaption)}</div>` : '';
+    if (m.messageType === 'image') {
+      return `<div class="msg-media msg-media-image" data-lightbox="${url}"><img src="${url}" loading="lazy" alt="Photo" onerror="this.closest('.msg-media-image').classList.add('load-failed')"><span class="msg-media-expand">${ICONS.expand}</span><span class="msg-media-fallback">${ICONS.file} Photo unavailable</span></div>${caption}`;
+    }
+    if (m.messageType === 'video') {
+      return `<video class="msg-media msg-media-video" src="${url}" controls preload="metadata"></video>${caption}`;
+    }
+    if (m.messageType === 'audio') {
+      return `<audio class="msg-media-audio" src="${url}" controls preload="metadata"></audio>${caption}`;
+    }
+    if (m.messageType === 'document') {
+      return `<a class="msg-media-doc" href="${url}" target="_blank" rel="noopener">${ICONS.file}<span>${escapeHtml(m.mediaFilename || 'Document')}</span></a>${caption}`;
+    }
+    return `<div class="msg-bubble">${escapeHtml(m.message)}</div>`;
+  }
+
   function msgBubble(m) {
+    const isMedia = ['image', 'video', 'audio', 'document'].includes(m.messageType);
     return `
       <div class="msg-row ${m.senderType}" data-message-id="${m._id}">
-        <div class="msg-bubble-wrap">
-          <div class="msg-bubble">${escapeHtml(m.message)}</div>
+        <div class="msg-bubble-wrap ${isMedia ? 'is-media' : ''}">
+          ${mediaContent(m)}
           <div class="msg-meta">${timeLabel(m.createdAt)} ${statusTick(m)}</div>
         </div>
       </div>
@@ -582,6 +687,9 @@
           </div>
         </div>
         <div class="chat-head-actions">
+          <select class="stage-select" id="repairStageSelect" title="Repair stage">
+            ${REPAIR_STAGE_ORDER.map((key) => `<option value="${key}" ${conversation.repairStage === key ? 'selected' : ''}>${REPAIR_STAGE_LABELS[key]}</option>`).join('')}
+          </select>
           <button type="button" class="btn ${conversation.status === 'open' ? 'btn-danger-ghost' : 'btn-ghost'} btn-sm" id="toggleStatusBtn">
             ${conversation.status === 'open' ? 'Close' : 'Reopen'}
           </button>
@@ -595,6 +703,7 @@
         <button type="button" class="icon-btn" id="quickRepliesManageBtn" title="Manage quick replies" style="flex:0 0 auto;">${ICONS.edit}</button>
       </div>
       <div class="qr-manager" id="qrManager"></div>
+      <div class="template-picker" id="templatePicker"></div>
       <div class="chat-input-bar">
         <textarea id="chatInput" placeholder="Type a message… (Enter to send, Shift+Enter for new line)" rows="1"></textarea>
         <button type="button" class="btn btn-primary send-btn" id="chatSendBtn">${ICONS.send}</button>
@@ -614,6 +723,18 @@
         loadDashboard();
       } catch (error) {
         showToast('Error', error.message);
+      }
+    });
+
+    document.getElementById('repairStageSelect').addEventListener('change', async (e) => {
+      const value = e.target.value;
+      try {
+        const { conversation: updated } = await AdminAPI.setRepairStage(conversation._id, value);
+        upsertConversation(updated);
+        state.selectedConversation = updated;
+      } catch (error) {
+        showToast('Error', error.message);
+        e.target.value = conversation.repairStage;
       }
     });
 
@@ -637,6 +758,7 @@
         // this call just triggers the send; no need to render it twice.
       } catch (error) {
         showToast('Message failed', error.message);
+        addNotifEntry({ title: 'Message failed', body: error.message, conversationId: conversation._id });
       } finally {
         sendBtn.disabled = false;
         input.focus();
@@ -652,7 +774,10 @@
       if (retryBtn) {
         input.value = retryBtn.dataset.retry;
         input.focus();
+        return;
       }
+      const lightboxTrigger = e.target.closest('[data-lightbox]');
+      if (lightboxTrigger && !lightboxTrigger.classList.contains('load-failed')) openLightbox(lightboxTrigger.dataset.lightbox);
     });
 
     document.getElementById('quickRepliesBar').addEventListener('click', (e) => {
@@ -663,6 +788,73 @@
         input.focus();
       }
       if (e.target.closest('#quickRepliesManageBtn')) toggleQuickReplyManager(conversation, messages);
+    });
+  }
+
+  // Attached ONCE (not inside renderChat) — el.chatPane itself is never
+  // recreated by renderChat (only its innerHTML is replaced), so a listener
+  // added there on every renderChat call would stack up duplicates every
+  // time the admin switches conversations, each with a stale closed-over
+  // `conversation`. Reading state.selectedConversation instead keeps this
+  // listener singular and always in sync with whatever's actually open.
+  function setupTemplatePickerTrigger() {
+    el.chatPane.addEventListener('click', (e) => {
+      if (e.target.closest('#openTemplatePickerBtn') && state.selectedConversation) {
+        toggleTemplatePicker(state.selectedConversation);
+      }
+    });
+  }
+
+  function toggleTemplatePicker(conversation) {
+    const panel = document.getElementById('templatePicker');
+    if (!panel) return;
+    if (panel.classList.contains('open')) { panel.classList.remove('open'); return; }
+    renderTemplatePicker(panel, conversation);
+    panel.classList.add('open');
+  }
+
+  async function renderTemplatePicker(panel, conversation) {
+    panel.innerHTML = '<div class="skel-line w60"></div>';
+    try {
+      if (!state.templates) state.templates = (await AdminAPI.listTemplates()).templates;
+    } catch (error) {
+      panel.innerHTML = `<p style="color:var(--danger);font-size:0.82rem;">Could not load templates: ${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
+    const device = [conversation.deviceBrand, conversation.deviceModel].filter(Boolean).join(' ') || 'their device';
+
+    panel.innerHTML = `
+      <h4>Send an approved template</h4>
+      ${state.templates.map((t, ti) => `
+        <div class="template-card">
+          <div class="template-card-title">${escapeHtml(t.label)}</div>
+          ${t.params.map((p, pi) => `
+            <input type="text" class="template-param-input" data-template="${ti}" data-param="${pi}"
+              placeholder="${escapeHtml(p.label)}"
+              value="${escapeHtml(p.key === 'customerName' ? conversation.customerName : p.key === 'device' ? device : '')}">
+          `).join('')}
+          <button type="button" class="btn btn-primary btn-sm" data-send-template="${ti}">Send</button>
+        </div>
+      `).join('')}
+    `;
+
+    panel.querySelectorAll('[data-send-template]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const ti = Number(btn.dataset.sendTemplate);
+        const template = state.templates[ti];
+        const params = Array.from(panel.querySelectorAll(`[data-template="${ti}"]`)).map((input) => input.value.trim());
+        btn.disabled = true;
+        try {
+          await AdminAPI.sendTemplate(conversation._id, template.name, params);
+          panel.classList.remove('open');
+          showToast('Template sent', `${template.label} sent to ${conversation.customerName}.`);
+        } catch (error) {
+          showToast('Template failed', error.message);
+        } finally {
+          btn.disabled = false;
+        }
+      });
     });
   }
 
@@ -720,6 +912,24 @@
   function scrollChatToBottom() {
     const box = document.getElementById('chatMessages');
     if (box) box.scrollTop = box.scrollHeight;
+  }
+
+  /* ---------------- Image lightbox ---------------- */
+  let lightboxEl = null;
+  function openLightbox(url) {
+    if (!lightboxEl) {
+      lightboxEl = document.createElement('div');
+      lightboxEl.className = 'lightbox-overlay';
+      lightboxEl.innerHTML = '<img alt="Full-size photo">';
+      lightboxEl.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+      document.body.appendChild(lightboxEl);
+    }
+    lightboxEl.querySelector('img').src = url;
+    lightboxEl.classList.add('open');
+  }
+  function closeLightbox() {
+    if (lightboxEl) lightboxEl.classList.remove('open');
   }
 
   /* ---------------- Socket.IO (real-time) ---------------- */
@@ -824,6 +1034,9 @@
   }
 
   function notify(customerName, messageText, conversationId) {
+    // Logged to the notification center regardless of mute — muting only
+    // silences sound/toast/OS popups, it shouldn't make an event disappear.
+    addNotifEntry({ title: 'New WhatsApp message', body: `${customerName}: "${messageText}"`, conversationId });
     if (state.muted) return;
     playBeep();
     showToast('New WhatsApp message', `${customerName}: "${messageText}"`, () => {
@@ -834,5 +1047,80 @@
       const n = new Notification(`New message from ${customerName}`, { body: messageText });
       n.onclick = () => { window.focus(); };
     }
+  }
+
+  /* ---------------- Notification center (client-side only) ---------------- */
+  function loadNotifEntries() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(NOTIF_KEY));
+      return Array.isArray(saved) ? saved : [];
+    } catch (e) { return []; }
+  }
+
+  function saveNotifEntries() {
+    localStorage.setItem(NOTIF_KEY, JSON.stringify(state.notifications.slice(0, NOTIF_MAX)));
+  }
+
+  function addNotifEntry({ title, body, conversationId }) {
+    state.notifications.unshift({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      title, body, conversationId,
+      read: false,
+      at: new Date().toISOString()
+    });
+    state.notifications = state.notifications.slice(0, NOTIF_MAX);
+    saveNotifEntries();
+    renderNotifCenter();
+  }
+
+  function renderNotifCenter() {
+    const unread = state.notifications.filter((n) => !n.read).length;
+    el.notifBadge.hidden = unread === 0;
+    el.notifBadge.textContent = unread > 9 ? '9+' : String(unread);
+
+    if (!state.notifications.length) {
+      el.notifList.innerHTML = '<div class="notif-empty">No notifications yet.</div>';
+      return;
+    }
+    el.notifList.innerHTML = state.notifications.map((n) => `
+      <div class="notif-row ${n.read ? '' : 'unread'}" data-id="${n.id}" data-conv="${n.conversationId || ''}">
+        <div class="notif-row-title">${escapeHtml(n.title)}</div>
+        <div class="notif-row-body">${escapeHtml(n.body)}</div>
+        <div class="notif-row-time">${timeLabel(n.at)}</div>
+      </div>
+    `).join('');
+  }
+
+  function setupNotificationCenter() {
+    state.notifications = loadNotifEntries();
+    renderNotifCenter();
+
+    el.notifBellBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      el.notifPanel.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!el.notifPanel.classList.contains('open')) return;
+      if (!e.target.closest('.notif-wrap')) el.notifPanel.classList.remove('open');
+    });
+
+    el.notifMarkAllBtn.addEventListener('click', () => {
+      state.notifications.forEach((n) => { n.read = true; });
+      saveNotifEntries();
+      renderNotifCenter();
+    });
+
+    el.notifList.addEventListener('click', (e) => {
+      const row = e.target.closest('.notif-row');
+      if (!row) return;
+      const entry = state.notifications.find((n) => n.id === row.dataset.id);
+      if (entry) { entry.read = true; saveNotifEntries(); renderNotifCenter(); }
+      if (row.dataset.conv) {
+        el.notifPanel.classList.remove('open');
+        document.querySelector('.nav-item[data-view="conversations"]').click();
+        selectConversation(row.dataset.conv);
+      }
+    });
   }
 })();

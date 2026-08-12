@@ -152,7 +152,7 @@ async function sendTemplateMessage(
         template: {
             name: templateName,
 
-language: {
+            language: {
     code: "en"
 },
 
@@ -171,7 +171,44 @@ language: {
 }
 
 
+// Resolves a WhatsApp media ID to a temporary signed download URL (expires
+// after a few minutes) plus its mime type. Must be called fresh each time
+// media is viewed — the URL is not meant to be cached/stored long-term.
+async function getMediaUrl(mediaId) {
+    ensureConfiguration();
+
+    const rawVersion = String(config.apiVersion).trim();
+    const apiVersion = rawVersion.startsWith("v") ? rawVersion : `v${rawVersion}`;
+
+    try {
+        const response = await axios.get(
+            `https://graph.facebook.com/${apiVersion}/${mediaId}`,
+            { headers: { Authorization: `Bearer ${config.accessToken}` } }
+        );
+        return response.data; // { url, mime_type, sha256, file_size, id }
+    } catch (error) {
+        throw makeMetaError(error);
+    }
+}
+
+// The temp URL from getMediaUrl still requires the same bearer token to
+// actually fetch the bytes.
+async function downloadMedia(url) {
+    try {
+        const response = await axios.get(url, {
+            headers: { Authorization: `Bearer ${config.accessToken}` },
+            responseType: "arraybuffer"
+        });
+        return { buffer: Buffer.from(response.data), contentType: response.headers["content-type"] };
+    } catch (error) {
+        throw makeMetaError(error);
+    }
+}
+
+
 module.exports = {
     sendTextMessage,
-    sendTemplateMessage
+    sendTemplateMessage,
+    getMediaUrl,
+    downloadMedia
 };

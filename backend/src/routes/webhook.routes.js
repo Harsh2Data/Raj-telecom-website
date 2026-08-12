@@ -17,11 +17,36 @@ function validSignature(req) {
   return expectedBuffer.length === receivedBuffer.length && crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
 
+const MEDIA_TYPES = ['image', 'video', 'audio', 'document'];
+
+// WhatsApp media messages carry only a mediaId + mime type (+ filename for
+// documents, + optional caption) — never the bytes themselves. The actual
+// file is fetched on demand later via whatsapp.service.getMediaUrl/downloadMedia.
+function extractMedia(message) {
+  if (!MEDIA_TYPES.includes(message.type)) return null;
+  const payload = message[message.type] || {};
+  return {
+    messageType: message.type,
+    mediaId: payload.id,
+    mediaMimeType: payload.mime_type,
+    mediaFilename: payload.filename,
+    mediaCaption: payload.caption
+  };
+}
+
+const MEDIA_PREVIEW_LABEL = { image: '📷 Photo', video: '🎥 Video', audio: '🎤 Voice message' };
+
 function messageText(message) {
   if (message.type === 'text') return message.text && message.text.body;
   if (message.type === 'button') return message.button && message.button.text;
   if (message.type === 'interactive') {
     return message.interactive?.button_reply?.title || message.interactive?.list_reply?.title;
+  }
+  const media = extractMedia(message);
+  if (media) {
+    if (media.mediaCaption) return media.mediaCaption;
+    if (media.messageType === 'document') return `📄 ${media.mediaFilename || 'Document'}`;
+    return MEDIA_PREVIEW_LABEL[media.messageType];
   }
   return `[${message.type || 'unsupported'} message received]`;
 }
@@ -49,13 +74,18 @@ function broadcastStatus(update) {
 // panel's conversation/message system — this is now the primary way the
 // shop sees and answers customer messages (see conversation.controller.js),
 // replacing the old "relay everything to the owner's personal WhatsApp" flow.
-async function handleCustomerMessage(from, customerName, text, messageId) {
+async function handleCustomerMessage(from, customerName, text, messageId, media) {
   const conversation = await conversationService.getOrCreateConversation({ phone: from, name: customerName });
   const { duplicate, message } = await messageService.recordIncoming({
     conversationId: conversation._id,
     senderPhone: from,
     text,
-    whatsappMessageId: messageId
+    whatsappMessageId: messageId,
+    messageType: media?.messageType,
+    mediaId: media?.mediaId,
+    mediaMimeType: media?.mediaMimeType,
+    mediaFilename: media?.mediaFilename,
+    mediaCaption: media?.mediaCaption
   });
   if (duplicate) return;
   broadcastNewMessage(conversation, message);
@@ -105,7 +135,8 @@ async function handleIncomingMessages(value) {
     if (from === conversationService.normalizePhone(process.env.OWNER_PHONE)) {
       await handleOwnerReply(text, message.id);
     } else {
-      await handleCustomerMessage(from, contactNames.get(message.from) || 'Customer', text, message.id);
+      const media = extractMedia(message);
+      await handleCustomerMessage(from, contactNames.get(message.from) || 'Customer', text, message.id, media);
     }
   }
 }
