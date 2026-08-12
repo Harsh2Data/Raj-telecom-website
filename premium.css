@@ -109,7 +109,7 @@ footer{background:#080d1b;padding-top:0}.foot-top{padding:60px 0 42px}.foot-bran
    ================================================================ */
 
 .site-nav{
-  position:fixed;top:0;left:0;width:100%;z-index:9999;
+  position:fixed;top:58px;left:0;width:100%;z-index:9998;
   height:84px;display:flex;align-items:center;
   background:rgba(255,255,255,.90);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
@@ -287,12 +287,13 @@ body.nav-open{overflow:hidden}
    down while their background still fills all the way to y:0.
    ================================================================ */
 body{padding-top:0!important}
-.premium-hero{padding-top:84px}
-.premium-hero-grid{min-height:calc(650px - 84px)}
-.page-hero{padding-top:104px!important}
+.premium-hero{padding-top:142px}
+.premium-hero-grid{min-height:calc(650px - 142px)}
+.page-hero{padding-top:162px!important}
 @media(max-width:760px){
-  .premium-hero{padding-top:68px}
-  .page-hero{padding-top:88px!important}
+  .site-nav{top:48px}
+  .premium-hero{padding-top:116px}
+  .page-hero{padding-top:136px!important}
 }
 
 /* Repair-type icons: real PNG photos in place of the stroke-SVG icon,
