@@ -114,7 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (n < g) el.classList.add('done');
       if (n === g) el.classList.add('active');
     });
-    panels[name].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  panels[name].scrollIntoView({
+  behavior: 'auto',
+  block: 'start'
+});
   }
 
   function escapeHtml(str) {
